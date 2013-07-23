@@ -27,8 +27,9 @@ class Memory
     db.execute 'truncate memory'
   end
 
-  def save
+  def self.create params = {}
+    memory = Memory.new params
     id = CassandraCQL::UUID.new.to_guid
-    db.execute "insert into memory (id, description, state, priority) values ('#{id}', '#{description}', '#{state}', '#{priority}')"
+    db.execute "insert into memory (id, description, state, priority) values ('#{id}', '#{memory.description}', '#{memory.state}', '#{memory.priority}')"
   end
 end
