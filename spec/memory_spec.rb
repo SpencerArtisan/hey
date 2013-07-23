@@ -11,7 +11,6 @@ describe Memory do
     its (:description) { should == 'a description' }
     its (:state) { should == 'a state' }
     its (:priority) { should == 'a priority' }
-    its (:summary) { should == '1. a description' }
   end
 
   context 'attribute persistence' do

@@ -1,6 +1,12 @@
 require 'memory'
+require 'database'
 
 class Hey
+  def initialize
+    Database.node = '127.0.0.1:9160'
+    Database.keyspace = 'hey_prod'
+  end
+
   def execute args
     if args.empty?
       Memory.all.to_s

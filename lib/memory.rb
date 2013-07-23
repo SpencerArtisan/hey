@@ -1,10 +1,12 @@
 require 'cassandra'
 require 'cassandra-cql'
 require 'memory_set'
+require 'database'
 include SimpleUUID
+include Database
 
 class Memory
-  attr_accessor :description, :state, :priority, :id, :number
+  attr_accessor :description, :state, :priority, :id
 
   def initialize params = {}
     params = params.map {|k,v| {k.to_sym => v}}.reduce :merge
@@ -13,11 +15,6 @@ class Memory
     self.state = params[:state]
     self.priority = params[:priority]
     self.id = params[:id]
-    self.number = params[:number]
-  end
-
-  def summary
-    "#{number}. #{description}"
   end
 
   def self.all
@@ -32,10 +29,6 @@ class Memory
 
   def save
     id = CassandraCQL::UUID.new.to_guid
-    Memory.db.execute "insert into memory (id, description, state, priority) values ('#{id}', '#{description}', '#{state}', '#{priority}')"
-  end
-
-  def self.db
-    CassandraCQL::Database.new '127.0.0.1:9160', keyspace: 'hey'
+    db.execute "insert into memory (id, description, state, priority) values ('#{id}', '#{description}', '#{state}', '#{priority}')"
   end
 end
