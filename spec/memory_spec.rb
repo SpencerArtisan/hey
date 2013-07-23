@@ -6,11 +6,12 @@ describe Memory do
   end
 
   context 'basic functionality' do
-    subject { Memory.new description: 'a description', state: 'a state', priority: 'a priority' }
+    subject { Memory.new description: 'a description', state: 'a state', priority: 'a priority', number: 1 }
 
     its (:description) { should == 'a description' }
     its (:state) { should == 'a state' }
     its (:priority) { should == 'a priority' }
+    its (:summary) { should == '1. a description' }
   end
 
   context 'attribute persistence' do

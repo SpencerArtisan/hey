@@ -1,9 +1,10 @@
 require 'cassandra'
 require 'cassandra-cql'
+require 'memory_set'
 include SimpleUUID
 
 class Memory
-  attr_accessor :description, :state, :priority, :id
+  attr_accessor :description, :state, :priority, :id, :number
 
   def initialize params = {}
     params = params.map {|k,v| {k.to_sym => v}}.reduce :merge
@@ -12,11 +13,16 @@ class Memory
     self.state = params[:state]
     self.priority = params[:priority]
     self.id = params[:id]
+    self.number = params[:number]
+  end
+
+  def summary
+    "#{number}. #{description}"
   end
 
   def self.all
-    all = []  
-    db.execute('select * from memory').fetch { |row| all << Memory.new(row.to_hash) }
+    all = MemorySet.new
+    db.execute('select * from memory').fetch_hash{ |row| all << Memory.new(row) }
     all
   end
 
