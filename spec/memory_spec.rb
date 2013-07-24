@@ -6,12 +6,23 @@ describe Memory do
   end
 
   describe '#new' do
-    let (:memory) { Memory.new description: 'a description', state: 'a state', priority: 'a priority' }
-
     it 'should have properties set' do
-      expect(memory.description).to eq('a description')
-      expect(memory.state).to eq('a state')
-      expect(memory.priority).to eq('a priority')
+      memory = Memory.new description: 'a description', state: 'a state', priority: 'a priority', id: 'an id'
+      expect(memory.description).to eq 'a description'
+      expect(memory.state).to eq 'a state'
+      expect(memory.priority).to eq 'a priority'
+      expect(memory.id).to eq 'an id'
+    end
+
+    it 'should have sensible defaults' do
+      memory = Memory.new description: 'a description'
+      expect(memory.state).to eq 'Not started'
+      expect(memory.priority).to eq 'Medium'
+      expect(memory.id).not_to be_nil
+    end
+
+    it 'should have a description' do
+      expect {Memory.new}.to raise_error
     end
   end
 
@@ -26,14 +37,14 @@ describe Memory do
 
     context 'multiple item persistence' do
       it 'should create multiple memories' do
-        Memory.create
-        Memory.create
+        Memory.create description: 'first'
+        Memory.create description: 'second'
         expect(Memory.all).to have(2).items
       end
 
       it 'should create with unique ids' do
-        Memory.create
-        Memory.create
+        Memory.create description: 'first'
+        Memory.create description: 'second'
         expect(Memory[0].id).not_to eq(Memory[1].id)
       end
     end
@@ -52,7 +63,7 @@ describe Memory do
 
   describe '#delete' do
     it 'should be deletable' do
-      Memory.create.delete
+      Memory.create(description: 'a memory').delete
       expect(Memory.all).to be_empty
     end
   end
