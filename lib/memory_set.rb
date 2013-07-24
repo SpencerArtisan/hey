@@ -1,22 +1,20 @@
 require 'memory'
 
 class MemorySet
-  include Enumerable
-
-  def initialize
-    @memories = []
+  def initialize memories = []
+    @memories = memories
   end
 
-  def << memory
-    @memories << memory
+  def self.instance
+    MemorySet.new Memory.all
+  end
+
+  def create description
+    Memory.create description: description
   end
 
   def [] index
     @memories[index]
-  end
-
-  def each
-    @memories.each
   end
 
   def length

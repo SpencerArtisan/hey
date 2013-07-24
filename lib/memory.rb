@@ -1,6 +1,5 @@
 require 'cassandra'
 require 'cassandra-cql'
-require 'memory_set'
 require 'database'
 include SimpleUUID
 include Database
@@ -18,7 +17,7 @@ class Memory
   end
 
   def self.all
-    all = MemorySet.new
+    all = []
     db.execute('select * from memory').fetch_hash{ |row| all << Memory.new(row) }
     all
   end
