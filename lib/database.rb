@@ -1,6 +1,6 @@
 module Database
   def node
-    @@node ||= '127.0.0.1:9160'
+    @@node ||= '192.168.1.100:9160'
   end
 
   def node= address

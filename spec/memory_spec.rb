@@ -5,56 +5,55 @@ describe Memory do
     Memory.delete_all
   end
 
-  context 'basic functionality' do
-    subject { Memory.new description: 'a description', state: 'a state', priority: 'a priority' }
+  describe '#new' do
+    let (:memory) { Memory.new description: 'a description', state: 'a state', priority: 'a priority' }
 
-    its (:description) { should == 'a description' }
-    its (:state) { should == 'a state' }
-    its (:priority) { should == 'a priority' }
+    it 'should have properties set' do
+      expect(memory.description).to eq('a description')
+      expect(memory.state).to eq('a state')
+      expect(memory.priority).to eq('a priority')
+    end
   end
 
-  context 'creation' do
-    subject do
+  describe '#create' do
+    it 'should be saved to the database' do
       Memory.create description: 'a description', state: 'a state', priority: 'a priority'
-      Memory.all[0]
+      memory = Memory[0]
+      expect(memory.description).to eq('a description')
+      expect(memory.state).to eq('a state')
+      expect(memory.priority).to eq('a priority')
     end
 
-    its (:description) { should == 'a description' }
-    its (:state) { should == 'a state' }
-    its (:priority) { should == 'a priority' }
-  end
+    context 'multiple item persistence' do
+      it 'should create multiple memories' do
+        Memory.create
+        Memory.create
+        expect(Memory.all).to have(2).items
+      end
 
-  context 'update' do
-    subject do
-      Memory.create description: 'a description', state: 'a state', priority: 'a priority'
-      Memory.all[0].update description: 'a new description', state: 'a new state', priority: 'a new priority'
-      Memory.all[0]
+      it 'should create with unique ids' do
+        Memory.create
+        Memory.create
+        expect(Memory[0].id).not_to eq(Memory[1].id)
+      end
     end
-
-    its (:description) { should == 'a new description' }
-    its (:state) { should == 'a new state' }
-    its (:priority) { should == 'a new priority' }
   end
 
-  context 'delete' do
+  describe '#update' do
+    it 'should be updated in the database' do
+      memory = Memory.create description: 'a description', state: 'a state', priority: 'a priority'
+      memory.update description: 'a new description', state: 'a new state', priority: 'a new priority'
+      memory = Memory[0]
+      expect(memory.description).to eq('a new description')
+      expect(memory.state).to eq('a new state')
+      expect(memory.priority).to eq('a new priority')
+    end
+  end
+
+  describe '#delete' do
     it 'should be deletable' do
-      Memory.create
-      Memory.all[0].delete
-      Memory.all.should be_empty
+      Memory.create.delete
+      expect(Memory.all).to be_empty
     end
   end
-
-  #context 'multiple item persistence' do
-    #it 'should create multiple memories' do
-      #Memory.create
-      #Memory.create
-      #Memory.all.should have(2).item
-    #end
-
-    #it 'should create with unique ids' do
-      #Memory.create
-      #Memory.create
-      #Memory.all[0].id.should_not == Memory.all[1].id
-    #end
-  #end
 end

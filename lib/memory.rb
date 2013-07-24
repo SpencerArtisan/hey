@@ -13,13 +13,17 @@ class Memory
     self.description = params[:description]
     self.state = params[:state]
     self.priority = params[:priority]
-    self.id = params[:id]
+    self.id = params[:id] || CassandraCQL::UUID.new.to_guid
   end
 
   def self.all
     all = []
     db.execute('select * from memory').fetch_hash{ |row| all << Memory.new(row) if row.length > 1 }
     all.sort {|x, y| x.description <=> y.description}
+  end
+
+  def self.[] index
+    self.all[index]
   end
 
   def delete
@@ -29,6 +33,7 @@ class Memory
   def update params
     updates = params.map{|name, value| "#{name}='#{value}'"}.join ','
     db.execute "update memory set #{updates} where id='#{id}'"
+    Memory.new db.execute('select * from memory where id=?', id).fetch_row.to_hash
   end
 
   def self.delete_all
@@ -37,8 +42,8 @@ class Memory
 
   def self.create params = {}
     memory = Memory.new params
-    id = CassandraCQL::UUID.new.to_guid
-    db.execute "insert into memory (id, description, state, priority) values ('#{id}', '#{memory.description}', '#{memory.state}', '#{memory.priority}')"
+    db.execute "insert into memory (id, description, state, priority) values ('#{memory.id}', '#{memory.description}', '#{memory.state}', '#{memory.priority}')"
+    memory
   end
 
   def to_s

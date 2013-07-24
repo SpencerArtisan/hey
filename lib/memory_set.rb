@@ -22,11 +22,11 @@ class MemorySet
   end
 
   def [] index
-    @memories[index]
+    active_memories[index]
   end
 
   def length
-    @memories.length
+    active_memories.length
   end
 
   def to_s

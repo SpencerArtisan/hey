@@ -7,13 +7,13 @@ describe Hey do
   before { Memory.delete_all }
 
   it 'should retrieve an empty list of items' do
-    hey.execute([]).should be_empty
+    expect(hey.execute([])).to be_empty
   end
 
   it 'should retrieve a list of items' do
     hey.execute %w{task 1}
     hey.execute %w{task 2}
-    hey.execute([]).should == " 0. task 1\n 1. task 2"
+    expect(hey.execute([])).to eq(" 0. task 1\n 1. task 2")
   end
 
   it 'should create a new item' do
@@ -31,7 +31,7 @@ describe Hey do
 
   it 'should mark a task as high priority' do
     hey.execute %w{task}
-    hey.execute %w{-h 0}
+    hey.execute %w{-p 0}
   end
 
   it 'should mark a task as complete' do
@@ -40,6 +40,6 @@ describe Hey do
   end
 
   it 'should provide help' do
-    hey.execute(%w{-help}).should_not be_nil
+    expect(hey.execute(%w{-help})).to_not be_nil
   end
 end

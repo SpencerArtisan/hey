@@ -10,7 +10,7 @@ describe Hey do
 
   it 'should retrieve a list of item' do
     memory_set.stub to_s: 'memory set'
-    hey.execute([]).should == 'memory set'
+    expect(hey.execute([])).to eq('memory set')
   end
 
   it 'should create a new item' do
@@ -30,7 +30,7 @@ describe Hey do
 
   it 'should mark a task as high priority' do
     memory_set.should_receive(:update).with 1, :priority => :high
-    hey.execute %w{-h 1}
+    hey.execute %w{-p 1}
   end
 
   it 'should mark a task as complete' do
@@ -39,6 +39,6 @@ describe Hey do
   end
 
   it 'should provide help' do
-    hey.execute(%w{-help}).should_not be_nil
+    expect(hey.execute(%w{-help})).to_not be_nil
   end
 end
