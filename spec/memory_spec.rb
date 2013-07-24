@@ -27,12 +27,13 @@ describe Memory do
   context 'update' do
     subject do
       Memory.create description: 'a description', state: 'a state', priority: 'a priority'
+      Memory.all[0].update description: 'a new description', state: 'a new state', priority: 'a new priority'
       Memory.all[0]
     end
 
-    its (:description) { should == 'a description' }
-    its (:state) { should == 'a state' }
-    its (:priority) { should == 'a priority' }
+    its (:description) { should == 'a new description' }
+    its (:state) { should == 'a new state' }
+    its (:priority) { should == 'a new priority' }
   end
 
   context 'delete' do

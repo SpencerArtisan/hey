@@ -19,11 +19,16 @@ class Memory
   def self.all
     all = []
     db.execute('select * from memory').fetch_hash{ |row| all << Memory.new(row) if row.length > 1 }
-    all
+    all.sort {|x, y| x.description <=> y.description}
   end
 
   def delete
     db.execute "delete from memory where id='#{id}'"
+  end
+
+  def update params
+    updates = params.map{|name, value| "#{name}='#{value}'"}.join ','
+    db.execute "update memory set #{updates} where id='#{id}'"
   end
 
   def self.delete_all

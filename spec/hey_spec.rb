@@ -34,7 +34,7 @@ describe Hey do
   end
 
   it 'should mark a task as complete' do
-    memory_set.should_receive(:update).with 1, :status => :complete
+    memory_set.should_receive(:update).with 1, :state => :complete
     hey.execute %w{-c 1}
   end
 

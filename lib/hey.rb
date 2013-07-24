@@ -11,9 +11,7 @@ class Hey
     elsif args[0] == '-h'
       memory_set.update args[1].to_i, priority: :high
     elsif args[0] == '-c'
-      memory_set.update args[1].to_i, status: :complete
-    elsif args[0] == '-p'
-      memory_set.save_remote
+      memory_set.update args[1].to_i, state: :complete
     elsif args[0] == '-help'
       help
     else

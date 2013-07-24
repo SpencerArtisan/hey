@@ -17,6 +17,10 @@ class MemorySet
     self[index].delete
   end
 
+  def update index, params
+    self[index].update params
+  end
+
   def [] index
     @memories[index]
   end
@@ -26,10 +30,15 @@ class MemorySet
   end
 
   def to_s
-    @memories.each_with_index.map {|memory, i| summary(i, memory)}.join "\n"
+    active_memories.each_with_index.map {|memory, i| summary(i, memory)}.join "\n"
+  end
+
+  def active_memories
+    @memories.select {|memory| memory.state != 'complete'}
   end
 
   def summary index, memory
-    "#{index}. #{memory.description}"
+    marker = memory.priority == 'high' ? '*' : ' '
+    "#{marker}#{index}. #{memory.description}"
   end
 end
