@@ -14,12 +14,12 @@ describe Hey do
   end
 
   it 'should create a new item' do
-    memory_set.should_receive(:create).with description: 'task'
+    memory_set.should_receive(:create).with 'task'
     hey.execute %w{task}
   end
   
   it 'should create a new multi-word item' do
-    memory_set.should_receive(:create).with description: 'multi word task'
+    memory_set.should_receive(:create).with 'multi word task'
     hey.execute %w{multi word task}
   end
 

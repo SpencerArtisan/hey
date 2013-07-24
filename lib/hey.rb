@@ -17,7 +17,7 @@ class Hey
     elsif args[0] == '-help'
       help
     else
-      memory_set.create description: args.join(' ')
+      memory_set.create args.join(' ')
     end
   end
 

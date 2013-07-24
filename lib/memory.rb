@@ -18,8 +18,12 @@ class Memory
 
   def self.all
     all = []
-    db.execute('select * from memory').fetch_hash{ |row| all << Memory.new(row) }
+    db.execute('select * from memory').fetch_hash{ |row| all << Memory.new(row) if row.length > 1 }
     all
+  end
+
+  def delete
+    db.execute "delete from memory where id='#{id}'"
   end
 
   def self.delete_all
@@ -30,5 +34,9 @@ class Memory
     memory = Memory.new params
     id = CassandraCQL::UUID.new.to_guid
     db.execute "insert into memory (id, description, state, priority) values ('#{id}', '#{memory.description}', '#{memory.state}', '#{memory.priority}')"
+  end
+
+  def to_s
+    "#{id}. #{description}"
   end
 end

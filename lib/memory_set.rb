@@ -13,6 +13,10 @@ class MemorySet
     Memory.create description: description
   end
 
+  def delete index
+    self[index].delete
+  end
+
   def [] index
     @memories[index]
   end
@@ -22,7 +26,7 @@ class MemorySet
   end
 
   def to_s
-    @memories.each_with_index.map {|memory, i| summary(i + 1, memory)}.join "\n"
+    @memories.each_with_index.map {|memory, i| summary(i, memory)}.join "\n"
   end
 
   def summary index, memory

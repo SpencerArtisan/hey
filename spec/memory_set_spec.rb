@@ -9,11 +9,18 @@ describe MemorySet do
 
   it 'should display a list of numbered memories' do
     memory_set = MemorySet.new [stub(description: 'first'), stub(description: 'second')]
-    memory_set.to_s.should == "1. first\n2. second"
+    memory_set.to_s.should == "0. first\n1. second"
   end
 
   it 'should allow creation of a new memory' do
     Memory.should_receive(:create).with description: 'a memory'
     MemorySet.new.create 'a memory'
+  end
+
+  it 'should allow deletion of a memory' do
+    memory = stub
+    Memory.stub all: [memory]
+    memory.should_receive :delete
+    MemorySet.instance.delete 0
   end
 end

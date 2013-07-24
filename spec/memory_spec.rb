@@ -35,17 +35,25 @@ describe Memory do
     its (:priority) { should == 'a priority' }
   end
 
-  context 'multiple item persistence' do
-    it 'should create multiple memories' do
+  context 'delete' do
+    it 'should be deletable' do
       Memory.create
-      Memory.create
-      Memory.all.should have(2).item
-    end
-
-    it 'should create with unique ids' do
-      Memory.create
-      Memory.create
-      Memory.all[0].id.should_not == Memory.all[1].id
+      Memory.all[0].delete
+      Memory.all.should be_empty
     end
   end
+
+  #context 'multiple item persistence' do
+    #it 'should create multiple memories' do
+      #Memory.create
+      #Memory.create
+      #Memory.all.should have(2).item
+    #end
+
+    #it 'should create with unique ids' do
+      #Memory.create
+      #Memory.create
+      #Memory.all[0].id.should_not == Memory.all[1].id
+    #end
+  #end
 end
