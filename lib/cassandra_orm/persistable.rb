@@ -10,8 +10,8 @@ module CassandraORM
     alias_static_method :column_family, :database
 
     def initialize params = {}
-      params = self.class.defaults.merge(params) unless self.class.defaults.nil?
-      params.each {|k,v| instance_eval("self.#{k} = '#{v}'")}
+      params = self.class.defaults.merge(params) if self.class.defaults
+      params.each {|k,v| instance_eval("@#{k} = '#{v}'")}
     end
 
     def delete
