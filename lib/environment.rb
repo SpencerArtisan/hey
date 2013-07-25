@@ -1,3 +1,3 @@
 require 'cassandra_orm/database'
 
-CassandraORM::Database.database '192.168.1.100:9160', 'hey'
+CassandraORM::Database.database '127.0.0.1:9160', 'hey'
