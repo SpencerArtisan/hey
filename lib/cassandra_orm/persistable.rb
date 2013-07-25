@@ -14,12 +14,12 @@ module CassandraORM
     end
 
     def delete
-      database.execute "delete from #{column_family} where id='#{id}'"
+      database.execute "DELETE FROM #{column_family} WHERE id='#{id}'"
     end
 
     def update params
       updates = params.map{|name, value| "#{name}='#{value}'"}.join ','
-      database.execute "update #{column_family} set #{updates} where id='#{id}'"
+      database.execute "UPDATE #{column_family} SET #{updates} WHERE id='#{id}'"
     end
 
     def column_family
@@ -47,7 +47,7 @@ module CassandraORM
 
       def all
         all = []
-        database.execute("select * from #{column_family}").fetch_hash{ |row| all << new(row) if row.length > 1 }
+        database.execute("SELECT * FROM #{column_family}").fetch_hash{ |row| all << new(row) if row.length > 1 }
         all
       end
 
@@ -56,11 +56,11 @@ module CassandraORM
       end
 
       def retrieve id
-        new database.execute("select * from #{column_family} where id=?", id).fetch_row.to_hash
+        new database.execute("SELECT * FROM #{column_family} WHERE id=?", id).fetch_row.to_hash
       end
 
       def delete_all
-        database.execute "truncate #{column_family}"
+        database.execute "TRUNCATE #{column_family}"
       end
 
       def create params = {}
@@ -68,14 +68,14 @@ module CassandraORM
         params = {id: id}.merge params
         columns = params.keys.join ','
         values = params.values.map {|value| "'#{value}'"}.join ','
-        database.execute "insert into #{column_family} (#{columns}) values (#{values})"
+        database.execute "INSERT INTO #{column_family} (#{columns}) VALUES (#{values})"
       end
 
       def apply_schema
         fields = new.methods.grep(/\w=$/) - methods.grep(/\w=$/)
-        columns = fields.map {|field| "#{field[0..-2]} varchar"}.join ','
+        columns = fields.map {|field| "#{field[0..-2]} VARCHAR"}.join ','
         begin
-          database.execute "CREATE COLUMNFAMILY #{column_family} (id varchar PRIMARY KEY, #{columns})"
+          database.execute "CREATE COLUMNFAMILY #{column_family} (id VARCHAR PRIMARY KEY, #{columns})"
         rescue CassandraCQL::Error::InvalidRequestException
         end
       end

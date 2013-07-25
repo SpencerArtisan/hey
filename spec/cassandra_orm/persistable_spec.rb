@@ -8,7 +8,7 @@ module CassandraORM
   end
 
   describe Persistable do
-    let (:database) { stub.as_null_object }
+    let (:database) { stub }
 
     before do
       TestPersistable.database database
@@ -32,14 +32,14 @@ module CassandraORM
 
     describe '#create' do
       it 'should be saved to the database' do
-        database.should_receive(:execute).with "insert into testpersistable (id,field1,field2) values ('a guid','field1','field2')"
+        database.should_receive(:execute).with "INSERT INTO testpersistable (id,field1,field2) VALUES ('a guid','field1','field2')"
         TestPersistable.create field1: 'field1', field2: 'field2'
       end
     end
 
     describe '#update' do
       it 'should be updated in the database' do
-        database.should_receive(:execute).with "update testpersistable set field1='new field1',field2='new field2' where id='a guid'"
+        database.should_receive(:execute).with "UPDATE testpersistable SET field1='new field1',field2='new field2' WHERE id='a guid'"
         subject = TestPersistable.new id: 'a guid'
         subject.update field1: 'new field1', field2: 'new field2'
       end
@@ -47,7 +47,7 @@ module CassandraORM
 
     describe '#delete' do
       it 'should be deletable' do
-        database.should_receive(:execute).with "delete from testpersistable where id='a guid'"
+        database.should_receive(:execute).with "DELETE FROM testpersistable WHERE id='a guid'"
         subject = TestPersistable.new id: 'a guid'
         subject.delete
       end
