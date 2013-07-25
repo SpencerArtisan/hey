@@ -20,7 +20,6 @@ module CassandraORM
     def update params
       updates = params.map{|name, value| "#{name}='#{value}'"}.join ','
       database.execute "update #{column_family} set #{updates} where id='#{id}'"
-      self.class.retrieve id
     end
 
     def column_family
@@ -70,7 +69,6 @@ module CassandraORM
         columns = params.keys.join ','
         values = params.values.map {|value| "'#{value}'"}.join ','
         database.execute "insert into #{column_family} (#{columns}) values (#{values})"
-        retrieve id
       end
 
       def apply_schema

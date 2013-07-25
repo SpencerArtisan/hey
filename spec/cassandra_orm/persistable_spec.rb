@@ -1,5 +1,4 @@
 require 'cassandra_orm/persistable'
-require 'cassandra_orm/database'
 
 module CassandraORM
   class TestPersistable
@@ -9,12 +8,11 @@ module CassandraORM
   end
 
   describe Persistable do
-    let (:database) { stub }
+    let (:database) { stub.as_null_object }
 
     before do
-      TestPersistable.database Database.database
-      TestPersistable.apply_schema
-      TestPersistable.delete_all
+      TestPersistable.database database
+      CassandraCQL::UUID.stub new: (stub to_guid: 'a guid')
     end
 
     describe '#new' do
@@ -29,47 +27,29 @@ module CassandraORM
         subject = TestPersistable.new
         expect(subject.field1).to eq('default1')
         expect(subject.field2).to be_nil
-        #expect(subject.id).not_to be_nil
       end
     end
 
     describe '#create' do
       it 'should be saved to the database' do
+        database.should_receive(:execute).with "insert into testpersistable (id,field1,field2) values ('a guid','field1','field2')"
         TestPersistable.create field1: 'field1', field2: 'field2'
-        subject = TestPersistable[0]
-        expect(subject.field1).to eq('field1')
-        expect(subject.field2).to eq('field2')
-      end
-
-      context 'multiple item persistence' do
-        it 'should create multiple memories' do
-          TestPersistable.create field1: 'first'
-          TestPersistable.create field1: 'second'
-          expect(TestPersistable.all).to have(2).items
-        end
-
-        it 'should create with unique ids' do
-          TestPersistable.create field1: 'first'
-          TestPersistable.create field1: 'second'
-          expect(TestPersistable[0].id).not_to eq(TestPersistable[1].id)
-        end
       end
     end
 
     describe '#update' do
       it 'should be updated in the database' do
-        subject = TestPersistable.create field1: 'field1', field2: 'field2'
+        database.should_receive(:execute).with "update testpersistable set field1='new field1',field2='new field2' where id='a guid'"
+        subject = TestPersistable.new id: 'a guid'
         subject.update field1: 'new field1', field2: 'new field2'
-        subject = TestPersistable[0]
-        expect(subject.field1).to eq('new field1')
-        expect(subject.field2).to eq('new field2')
       end
     end
 
     describe '#delete' do
       it 'should be deletable' do
-        TestPersistable.create(field1: 'field1').delete
-        expect(TestPersistable.all).to be_empty
+        database.should_receive(:execute).with "delete from testpersistable where id='a guid'"
+        subject = TestPersistable.new id: 'a guid'
+        subject.delete
       end
     end
   end
