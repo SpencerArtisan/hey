@@ -1,6 +1,5 @@
 require 'hey'
 require 'memory'
-require 'database'
 
 describe Hey do
   let (:hey) { Hey.new }

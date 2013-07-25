@@ -1,5 +1,5 @@
 require 'hey'
-require 'database'
+require 'cassandra_orm/database'
 require 'memory'
 
 CassandraORM::Database.node = '192.168.1.100:9160'

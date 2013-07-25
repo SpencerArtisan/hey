@@ -1,4 +1,4 @@
-require 'database'
+require 'cassandra_orm/database'
 require 'cassandra'
 require 'cassandra-cql'
 require 'ruby_ext'

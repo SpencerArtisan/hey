@@ -1,5 +1,5 @@
-require 'persistable'
-require 'database'
+require 'cassandra_orm/persistable'
+require 'cassandra_orm/database'
 
 module CassandraORM
   class TestPersistable
