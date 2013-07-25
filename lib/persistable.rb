@@ -3,7 +3,6 @@ require 'cassandra'
 require 'cassandra-cql'
 require 'ruby_ext'
 include SimpleUUID
-include Database
 
 module CassandraORM
   module Persistable
@@ -28,11 +27,17 @@ module CassandraORM
       self.class.column_family
     end
 
+    def db
+      self.class.db
+    end
+
     def self.included(base)                                                         
       base.extend ClassMethods
     end
 
     module ClassMethods
+      include Database 
+
       def defaults params = nil
         return @defaults unless params
         @defaults = params
@@ -65,7 +70,7 @@ module CassandraORM
         retrieve id
       end
 
-      def apply_schema db
+      def apply_schema
         fields = new.methods.grep(/\w=$/) - methods.grep(/\w=$/)
         columns = fields.map {|field| "#{field[0..-2]} varchar"}.join ','
         begin

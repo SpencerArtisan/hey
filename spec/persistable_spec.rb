@@ -10,7 +10,7 @@ module CassandraORM
 
   describe Persistable do
     before do
-      TestPersistable.apply_schema db
+      TestPersistable.apply_schema
       TestPersistable.delete_all
     end
 
