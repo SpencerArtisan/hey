@@ -3,7 +3,7 @@ require 'memory_set'
 class Hey
   def execute args
     switch = args[0]
-    if switch == '-help'
+    if switch == '-h'
       return help
     end
 
@@ -18,8 +18,7 @@ class Hey
       memory_set.create args.join(' ')
     end
 
-    memory_set = MemorySet.instance
-    memory_set.to_s
+    MemorySet.instance.to_s
   end
 
   def help

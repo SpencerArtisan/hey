@@ -4,6 +4,17 @@ class Module
       module_eval "def #{name}(*args) self.class.#{name}(*args); end"
     end
   end
+
+  def attr_simple_accessor *names
+    names.each do |name|
+      module_eval %Q{
+      def #{name} #{name} = nil
+        return @#{name} unless #{name}
+        @#{name} = #{name}
+      end
+      }
+    end
+  end
 end
 
 class Hash

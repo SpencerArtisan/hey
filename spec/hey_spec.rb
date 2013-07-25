@@ -39,6 +39,6 @@ describe Hey do
   end
 
   it 'should provide help' do
-    expect(hey.execute(%w{-help})).to_not be_nil
+    expect(hey.execute(%w{-h})).to_not be_nil
   end
 end

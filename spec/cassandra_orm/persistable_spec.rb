@@ -37,6 +37,17 @@ module CassandraORM
       end
     end
 
+    describe '#retrieve' do
+      it 'should be retrieved from the database' do
+        row = stub(fetch_row: (stub to_hash: {id: 'an id', field1: 'field1', field2: 'field2'}))
+        database.should_receive(:execute).with("SELECT * FROM testpersistable WHERE id='an id'").and_return row
+        result = TestPersistable.retrieve 'an id'
+        expect(result.id).to eq 'an id'
+        expect(result.field1).to eq 'field1'
+        expect(result.field2).to eq 'field2'
+      end
+    end
+
     describe '#update' do
       it 'should be updated in the database' do
         database.should_receive(:execute).with "UPDATE testpersistable SET field1='new field1',field2='new field2' WHERE id='a guid'"

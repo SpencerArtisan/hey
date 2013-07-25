@@ -38,7 +38,7 @@ describe MemorySet do
       expect(memory_set.to_s).to be_empty
     end
 
-    it 'should highlight high priority tasks' do
+    it 'should highlight high priority memories' do
       memory_set = MemorySet.new [stub(description: 'first', priority: 'high').as_null_object]
       expect(memory_set.to_s).to eq("*0. first")
     end

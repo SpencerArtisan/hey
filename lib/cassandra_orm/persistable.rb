@@ -2,6 +2,7 @@ require 'cassandra_orm/database'
 require 'cassandra'
 require 'cassandra-cql'
 require 'ruby_ext'
+require 'cassandra_orm/cassandra-cql'
 include SimpleUUID
 
 module CassandraORM
@@ -28,20 +29,10 @@ module CassandraORM
     end
 
     module ClassMethods
-      def database database = nil
-        return @database unless database
-        @database = database
-      end
-
-      def defaults params = nil
-        return @defaults unless params
-        @defaults = params
-      end
+      attr_simple_accessor :database, :defaults
 
       def all
-        all = []
-        database.execute("SELECT * FROM #{column_family}").fetch_hash{ |row| all << new(row) if row.length > 1 }
-        all
+        database.execute("SELECT * FROM #{column_family}").all_hash_rows.map{ |row| new(row) }
       end
 
       def [] index
@@ -49,7 +40,7 @@ module CassandraORM
       end
 
       def retrieve id
-        new database.execute("SELECT * FROM #{column_family} WHERE id=?", id).fetch_row.to_hash
+        new database.execute("SELECT * FROM #{column_family} WHERE id='#{id}'").fetch_row.to_hash
       end
 
       def delete_all
@@ -57,11 +48,15 @@ module CassandraORM
       end
 
       def create params = {}
-        id = CassandraCQL::UUID.new.to_guid
-        params = {id: id}.merge params
+        params = assign_id params
         columns = params.keys.join ','
         values = params.values.map {|value| "'#{value}'"}.join ','
         database.execute "INSERT INTO #{column_family} (#{columns}) VALUES (#{values})"
+      end
+
+      def assign_id params
+        id = CassandraCQL::UUID.new.to_guid
+        {id: id}.merge params
       end
 
       def apply_schema
