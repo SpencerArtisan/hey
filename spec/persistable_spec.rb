@@ -12,7 +12,7 @@ module CassandraORM
     let (:database) { stub }
 
     before do
-      TestPersistable.db Database.db
+      TestPersistable.database Database.database
       TestPersistable.apply_schema
       TestPersistable.delete_all
     end

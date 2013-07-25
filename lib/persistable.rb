@@ -14,12 +14,12 @@ module CassandraORM
     end
 
     def delete
-      db.execute "delete from #{column_family} where id='#{id}'"
+      database.execute "delete from #{column_family} where id='#{id}'"
     end
 
     def update params
       updates = params.map{|name, value| "#{name}='#{value}'"}.join ','
-      db.execute "update #{column_family} set #{updates} where id='#{id}'"
+      database.execute "update #{column_family} set #{updates} where id='#{id}'"
       self.class.retrieve id
     end
 
@@ -27,8 +27,8 @@ module CassandraORM
       self.class.column_family
     end
 
-    def db
-      self.class.db
+    def database
+      self.class.database
     end
 
     def self.included(base)                                                         
@@ -36,9 +36,9 @@ module CassandraORM
     end
 
     module ClassMethods
-      def db database = nil
-        return @db unless database
-        @db = database
+      def database database = nil
+        return @database unless database
+        @database = database
       end
 
       def defaults params = nil
@@ -48,7 +48,7 @@ module CassandraORM
 
       def all
         all = []
-        db.execute("select * from #{column_family}").fetch_hash{ |row| all << new(row) if row.length > 1 }
+        database.execute("select * from #{column_family}").fetch_hash{ |row| all << new(row) if row.length > 1 }
         all
       end
 
@@ -57,11 +57,11 @@ module CassandraORM
       end
 
       def retrieve id
-        new db.execute("select * from #{column_family} where id=?", id).fetch_row.to_hash
+        new database.execute("select * from #{column_family} where id=?", id).fetch_row.to_hash
       end
 
       def delete_all
-        db.execute "truncate #{column_family}"
+        database.execute "truncate #{column_family}"
       end
 
       def create params = {}
@@ -69,7 +69,7 @@ module CassandraORM
         params = {id: id}.merge params
         columns = params.keys.join ','
         values = params.values.map {|value| "'#{value}'"}.join ','
-        db.execute "insert into #{column_family} (#{columns}) values (#{values})"
+        database.execute "insert into #{column_family} (#{columns}) values (#{values})"
         retrieve id
       end
 
@@ -77,7 +77,7 @@ module CassandraORM
         fields = new.methods.grep(/\w=$/) - methods.grep(/\w=$/)
         columns = fields.map {|field| "#{field[0..-2]} varchar"}.join ','
         begin
-          db.execute "CREATE COLUMNFAMILY #{column_family} (id varchar PRIMARY KEY, #{columns})"
+          database.execute "CREATE COLUMNFAMILY #{column_family} (id varchar PRIMARY KEY, #{columns})"
         rescue CassandraCQL::Error::InvalidRequestException
         end
       end

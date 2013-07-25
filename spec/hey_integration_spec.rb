@@ -6,7 +6,7 @@ describe Hey do
   let (:hey) { Hey.new }
 
   before do
-    Memory.db Database.db
+    Memory.database CassandraORM::Database.database
     Memory.delete_all
   end
 
