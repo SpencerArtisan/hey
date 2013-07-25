@@ -1,3 +1,11 @@
+class Module
+  def alias_static_method *names
+    names.each do |name|
+      module_eval "def #{name}(*args) self.class.#{name}(*args); end"
+    end
+  end
+end
+
 class Hash
   def map! &block
     result = {}

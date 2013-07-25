@@ -7,6 +7,7 @@ include SimpleUUID
 module CassandraORM
   module Persistable
     attr_accessor :id
+    alias_static_method :column_family, :database
 
     def initialize params = {}
       params = self.class.defaults.merge(params) unless self.class.defaults.nil?
@@ -20,14 +21,6 @@ module CassandraORM
     def update params
       updates = params.map{|name, value| "#{name}='#{value}'"}.join ','
       database.execute "UPDATE #{column_family} SET #{updates} WHERE id='#{id}'"
-    end
-
-    def column_family
-      self.class.column_family
-    end
-
-    def database
-      self.class.database
     end
 
     def self.included(base)                                                         
