@@ -1,5 +1,14 @@
+require 'database'
+require 'cassandra'
+require 'cassandra-cql'
+require 'ruby_ext'
+include SimpleUUID
+include Database
+
 module CassandraORM
   module Persistable
+    attr_accessor :id
+
     def initialize params = {}
       params = self.class.defaults.merge(params) unless self.class.defaults.nil?
       params.each {|k,v| instance_eval("self.#{k} = '#{v}'")}
@@ -56,8 +65,17 @@ module CassandraORM
         retrieve id
       end
 
+      def apply_schema db
+        fields = new.methods.grep(/\w=$/) - methods.grep(/\w=$/)
+        columns = fields.map {|field| "#{field[0..-2]} varchar"}.join ','
+        begin
+          db.execute "CREATE COLUMNFAMILY #{column_family} (id varchar PRIMARY KEY, #{columns})"
+        rescue CassandraCQL::Error::InvalidRequestException
+        end
+      end
+
       def column_family
-        name.downcase
+        name.downcase.split('::').last
       end
     end
   end
