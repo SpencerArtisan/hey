@@ -1,3 +1,4 @@
+require 'environment'
 require 'hey'
 require 'memory'
 
