@@ -36,7 +36,10 @@ module CassandraORM
     end
 
     module ClassMethods
-      include Database 
+      def db database = nil
+        return @db unless database
+        @db = database
+      end
 
       def defaults params = nil
         return @defaults unless params

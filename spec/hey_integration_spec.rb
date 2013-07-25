@@ -1,9 +1,14 @@
 require 'hey'
 require 'memory'
+require 'database'
 
 describe Hey do
   let (:hey) { Hey.new }
-  before { Memory.delete_all }
+
+  before do
+    Memory.db Database.db
+    Memory.delete_all
+  end
 
   it 'should retrieve an empty list of items' do
     expect(hey.execute([])).to be_empty

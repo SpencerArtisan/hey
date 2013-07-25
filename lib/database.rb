@@ -1,21 +1,21 @@
 module Database
-  def node
-    @@node ||= '192.168.1.100:9160'
+  def self.node
+    @node ||= '192.168.1.100:9160'
   end
 
-  def node= address
-    @@node ||= address
+  def self.node= address
+    @node ||= address
   end
 
-  def keyspace
-    @@keyspace ||= 'hey'
+  def self.keyspace
+    @keyspace ||= 'hey'
   end
 
-  def keyspace= name
-    @@keyspace ||= name
+  def self.keyspace= name
+    @keyspace ||= name
   end
 
-  def db
+  def self.db
     CassandraCQL::Database.new node, keyspace: keyspace
   end
 end

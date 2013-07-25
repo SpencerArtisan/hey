@@ -1,15 +1,18 @@
 require 'persistable'
+require 'database'
 
 module CassandraORM
   class TestPersistable
     include Persistable
     attr_accessor :field1, :field2
     defaults field1: 'default1'
-
   end
 
   describe Persistable do
+    let (:database) { stub }
+
     before do
+      TestPersistable.db Database.db
       TestPersistable.apply_schema
       TestPersistable.delete_all
     end

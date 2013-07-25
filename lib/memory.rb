@@ -1,4 +1,5 @@
 require 'persistable'
+require 'database'
 
 class Memory
   include CassandraORM::Persistable
