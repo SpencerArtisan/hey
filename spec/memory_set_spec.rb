@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'memory_set'
 
 describe MemorySet do
@@ -38,9 +39,21 @@ describe MemorySet do
       expect(memory_set.to_s).to be_empty
     end
 
+    it 'should not show low priority memories' do
+      memory_set = MemorySet.new [stub(description: 'first', priority: 'low').as_null_object]
+      expect(memory_set.to_s).to be_empty
+    end
+
     it 'should highlight high priority memories' do
       memory_set = MemorySet.new [stub(description: 'first', priority: 'high').as_null_object]
       expect(memory_set.to_s).to eq("*0. first")
+    end
+  end
+
+  describe '#to_s_full' do
+    it 'should highlight low priority memories' do
+      memory_set = MemorySet.new [stub(description: 'first', priority: 'low').as_null_object]
+      expect(memory_set.to_s_full).to eq("↓0. first")
     end
   end
 end
