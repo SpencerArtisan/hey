@@ -17,10 +17,6 @@ describe Hey do
     memory_set.stub to_s_full: 'memory set'
     expect(hey.execute(%w{-f})).to eq('memory set')
   end
-  it 'should retrieve a list of item' do
-    memory_set.stub to_s: 'memory set'
-    expect(hey.execute([])).to eq('memory set')
-  end
 
   it 'should create a new item' do
     memory_set.should_receive(:create).with 'task'
