@@ -10,8 +10,8 @@ class MemorySet
     MemorySet.new Memory.all
   end
 
-  def create description
-    Memory.create description: description
+  def create description, other_attributes = {}
+    Memory.create({description: description}.merge(other_attributes))
   end
 
   def delete index
@@ -31,17 +31,12 @@ class MemorySet
   end
 
   def to_s
-    list active_memories.select {|memory| memory.priority != 'low'}
+    active_memories.each_with_index.map {|memory, i| summary(i, memory) if memory.priority != 'low'}.compact.join "\n"
   end
 
   def to_s_full
-    list active_memories
+    active_memories.each_with_index.map {|memory, i| summary(i, memory)}.join "\n"
   end
-
-  def list memories
-    memories.each_with_index.map {|memory, i| summary(i, memory)}.join "\n"
-  end
-
 
   def active_memories
     @memories.select {|memory| memory.state != 'complete'}

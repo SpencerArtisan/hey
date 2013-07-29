@@ -1,5 +1,6 @@
 require 'memory_set'
 require 'switch'
+require 'ruby_ext'
 
 class Hey
   include SwitchSupport
@@ -15,20 +16,16 @@ class Hey
     default :create, :list
   end
 
+  def execute args
+    switches args
+  end
+
   def delete args
-    MemorySet.instance.delete args[1].to_i
-  end
-
-  def low_priority args
-    MemorySet.instance.update args[1].to_i, priority: :low
-  end
-
-  def high_priority args
-    MemorySet.instance.update args[1].to_i, priority: :high
+    MemorySet.instance.delete id_arg(args)
   end
 
   def complete args
-    MemorySet.instance.update args[1].to_i, state: :complete
+    MemorySet.instance.update id_arg(args), state: :complete
   end
 
   def list args
@@ -39,12 +36,24 @@ class Hey
     MemorySet.instance.to_s_full
   end
 
-  def create args
-    MemorySet.instance.create args.join(' ')
+  def low_priority args
+    create_or_update args, 'low'
   end
 
-  def execute args
-    switches args
+  def high_priority args
+    create_or_update args, 'high'
+  end
+
+  def create_or_update args, priority
+    if has_id_arg? args
+      MemorySet.instance.update id_arg(args), priority: priority
+    else
+      MemorySet.instance.create args[1..-1].join(' '), priority: priority
+    end
+  end
+
+  def create args
+    MemorySet.instance.create args.join(' ')
   end
 
   def help args
@@ -56,5 +65,13 @@ class Hey
        hey -l id                 make item with given id low priority
        hey -p id                 make item with given id high priority
     }
+  end
+
+  def has_id_arg? args
+    args.length == 2 && args[1].is_integer?
+  end
+
+  def id_arg args
+    args[1].to_i
   end
 end

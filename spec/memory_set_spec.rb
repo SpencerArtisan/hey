@@ -14,6 +14,11 @@ describe MemorySet do
     MemorySet.new.create 'a memory'
   end
 
+  it 'should allow creation of a new memory with low priority' do
+    Memory.should_receive(:create).with description: 'a memory', priority: 'low'
+    MemorySet.new.create 'a memory', priority: 'low'
+  end
+
   it 'should allow updating a memory' do
     update_params = stub
     Memory.stub all: [memory]
@@ -47,6 +52,12 @@ describe MemorySet do
     it 'should highlight high priority memories' do
       memory_set = MemorySet.new [stub(description: 'first', priority: 'high').as_null_object]
       expect(memory_set.to_s).to eq("*0. first")
+    end
+
+    it 'should number the same way for the full and partial list' do
+      memory_set = MemorySet.new [stub(description: 'first', priority: 'low').as_null_object,
+                                  stub(description: 'second').as_null_object]
+      expect(memory_set.to_s).to eq(" 1. second")
     end
   end
 

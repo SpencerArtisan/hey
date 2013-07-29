@@ -22,6 +22,16 @@ describe Hey do
     memory_set.should_receive(:create).with 'task'
     hey.execute %w{task}
   end
+
+  it 'should create a new low priority item' do
+    memory_set.should_receive(:create).with 'task', priority: 'low'
+    hey.execute %w{-l task}
+  end
+  
+  it 'should create a new high priority item' do
+    memory_set.should_receive(:create).with 'task', priority: 'high'
+    hey.execute %w{-p task}
+  end
   
   it 'should create a new multi-word item' do
     memory_set.should_receive(:create).with 'multi word task'
@@ -34,12 +44,12 @@ describe Hey do
   end
 
   it 'should mark a task as low priority' do
-    memory_set.should_receive(:update).with 1, priority: :low
+    memory_set.should_receive(:update).with 1, priority: 'low'
     hey.execute %w{-l 1}
   end
 
   it 'should mark a task as high priority' do
-    memory_set.should_receive(:update).with 1, priority: :high
+    memory_set.should_receive(:update).with 1, priority: 'high'
     hey.execute %w{-p 1}
   end
 
