@@ -4,32 +4,32 @@ require 'memory_set'
 describe MemorySet do
   let(:memory) { stub.as_null_object }
 
-  it 'should be a singleton object' do
+  it 'should initialise itself with all known memories' do
     Memory.should_receive(:all).and_return [memory]
-    expect(MemorySet.instance[0]).to eq(memory)
+    expect(MemorySet.new[0]).to eq(memory)
   end
 
   it 'should allow creation of a new memory' do
+    Memory.stub all: []
     Memory.should_receive(:create).with description: 'a memory'
     MemorySet.new.create 'a memory'
   end
 
   it 'should allow creation of a new memory with low priority' do
+    Memory.stub all: []
     Memory.should_receive(:create).with description: 'a memory', priority: 'low'
     MemorySet.new.create 'a memory', priority: 'low'
   end
 
   it 'should allow updating a memory' do
     update_params = stub
-    Memory.stub all: [memory]
     memory.should_receive(:update).with update_params
-    MemorySet.instance.update 0, update_params
+    MemorySet.new([memory]).update 0, update_params
   end
 
   it 'should allow deletion of a memory' do
-    Memory.stub all: [memory]
     memory.should_receive :delete
-    MemorySet.instance.delete 0
+    MemorySet.new([memory]).delete 0
   end
 
   describe '#to_s' do

@@ -5,7 +5,7 @@ describe Hey do
   let (:memory_set) { stub }
 
   before do
-    MemorySet.stub instance: memory_set
+    MemorySet.stub new: memory_set
   end
 
   it 'should retrieve a list of the main items' do

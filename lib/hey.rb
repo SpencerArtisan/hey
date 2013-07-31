@@ -21,19 +21,19 @@ class Hey
   end
 
   def delete args
-    MemorySet.instance.delete id_arg(args)
+    MemorySet.new.delete id_arg(args)
   end
 
   def complete args
-    MemorySet.instance.update id_arg(args), state: :complete
+    MemorySet.new.update id_arg(args), state: :complete
   end
 
   def list args
-    MemorySet.instance.to_s
+    MemorySet.new.to_s
   end
 
   def full_list args
-    MemorySet.instance.to_s_full
+    MemorySet.new.to_s_full
   end
 
   def low_priority args
@@ -46,14 +46,14 @@ class Hey
 
   def create_or_update args, priority
     if has_id_arg? args
-      MemorySet.instance.update id_arg(args), priority: priority
+      MemorySet.new.update id_arg(args), priority: priority
     else
-      MemorySet.instance.create args[1..-1].join(' '), priority: priority
+      MemorySet.new.create args[1..-1].join(' '), priority: priority
     end
   end
 
   def create args
-    MemorySet.instance.create args.join(' ')
+    MemorySet.new.create args.join(' ')
   end
 
   def help args

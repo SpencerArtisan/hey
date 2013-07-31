@@ -2,12 +2,8 @@
 require 'memory'
 
 class MemorySet
-  def initialize memories = []
+  def initialize memories = Memory.all
     @memories = memories
-  end
-
-  def self.instance
-    MemorySet.new Memory.all
   end
 
   def create description, other_attributes = {}
