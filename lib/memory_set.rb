@@ -1,7 +1,12 @@
 # encoding: utf-8
 require 'memory'
+require 'forwardable'
 
 class MemorySet
+  include Enumerable
+  extend Forwardable
+  def_delegators :@memories, :[], :each
+
   def initialize memories = Memory.all
     @memories = memories
   end
@@ -16,14 +21,6 @@ class MemorySet
 
   def update index, params
     self[index].update params
-  end
-
-  def [] index
-    active_memories[index]
-  end
-
-  def length
-    active_memories.length
   end
 
   def to_s

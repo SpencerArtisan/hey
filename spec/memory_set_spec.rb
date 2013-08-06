@@ -5,8 +5,8 @@ describe MemorySet do
   let(:memory) { stub.as_null_object }
 
   it 'should initialise itself with all known memories' do
-    Memory.should_receive(:all).and_return [memory]
-    expect(MemorySet.new[0]).to eq(memory)
+    Memory.stub all: [memory]
+    expect(MemorySet.new.to_a).to eq [memory]
   end
 
   it 'should allow creation of a new memory' do
@@ -36,7 +36,7 @@ describe MemorySet do
     it 'should display a list of numbered memories' do
       memory_set = MemorySet.new [stub(description: 'first').as_null_object,
                                   stub(description: 'second').as_null_object]
-      expect(memory_set.to_s).to eq(" 0. first\n 1. second")
+      expect(memory_set.to_s).to eq " 0. first\n 1. second"
     end
 
     it 'should not show completed memories' do
@@ -51,20 +51,20 @@ describe MemorySet do
 
     it 'should highlight high priority memories' do
       memory_set = MemorySet.new [stub(description: 'first', priority: 'high').as_null_object]
-      expect(memory_set.to_s).to eq("*0. first")
+      expect(memory_set.to_s).to eq "*0. first"
     end
 
     it 'should number the same way for the full and partial list' do
       memory_set = MemorySet.new [stub(description: 'first', priority: 'low').as_null_object,
                                   stub(description: 'second').as_null_object]
-      expect(memory_set.to_s).to eq(" 1. second")
+      expect(memory_set.to_s).to eq " 1. second"
     end
   end
 
   describe '#to_s_full' do
     it 'should highlight low priority memories' do
       memory_set = MemorySet.new [stub(description: 'first', priority: 'low').as_null_object]
-      expect(memory_set.to_s_full).to eq("↓0. first")
+      expect(memory_set.to_s_full).to eq "↓0. first"
     end
   end
 end
