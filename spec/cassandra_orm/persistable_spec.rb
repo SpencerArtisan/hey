@@ -8,11 +8,11 @@ module CassandraORM
   end
 
   describe Persistable do
-    let (:database) { stub }
+    let (:database) { double }
 
     before do
       TestPersistable.database database
-      CassandraCQL::UUID.stub new: (stub to_guid: 'a guid')
+      CassandraCQL::UUID.stub new: (double to_guid: 'a guid')
     end
 
     describe '#new' do
@@ -39,7 +39,7 @@ module CassandraORM
 
     describe '#retrieve' do
       it 'should be retrieved from the database' do
-        row = stub(fetch_row: (stub to_hash: {id: 'an id', field1: 'field1', field2: 'field2'}))
+        row = double(fetch_row: (double to_hash: {id: 'an id', field1: 'field1', field2: 'field2'}))
         database.should_receive(:execute).with("SELECT * FROM testpersistable WHERE id='an id'").and_return row
         result = TestPersistable.retrieve 'an id'
         expect(result.id).to eq 'an id'
