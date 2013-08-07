@@ -6,14 +6,14 @@ class Hey
   include SwitchSupport
 
   switches do
-    h :help
-    l :low_priority, :list
-    p :high_priority, :list
-    c :complete, :list
-    d :delete, :list
-    f :full_list
-    no_args :list
-    default :create, :list
+    h call: :help
+    l calls: [:low_priority, :list]
+    p calls: [:high_priority, :list]
+    c calls: [:complete, :list]
+    d calls: [:delete, :list]
+    f call: :full_list
+    no_args call: :list
+    default calls: [:create, :list]
   end
 
   def execute args

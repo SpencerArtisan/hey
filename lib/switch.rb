@@ -1,27 +1,20 @@
 class Switch < BasicObject
-  def method_missing m, *args
+  def method_missing m, options
     @switch_methods ||= {}
-    @switch_methods[m] = args
+    @switch_methods[m] = options[:calls] || [options[:call]]
   end
 
-  def no_args *methods
-    @no_args = methods
-  end
-
-  def default *methods
-    @default = methods
-  end
-
-  def handle_switch instance, args
-    methods = 
+  def process instance, args
+    switch = 
       if args.length == 0
-        @no_args
+        :no_args
       elsif has_switch(args)
-        @switch_methods[get_switch(args)]
+        get_switch(args)
       else
-        @default
+        :default
       end
     result = nil
+    methods = @switch_methods[switch]
     methods.each {|method| result = instance.send method, args}
     result
   end
@@ -37,7 +30,7 @@ end
 
 module SwitchSupport
   def switches args
-    self.class.switches.handle_switch self, args
+    self.class.switches.process self, args
   end
 
   def self.included(base)                                                         
