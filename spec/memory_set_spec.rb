@@ -9,6 +9,15 @@ describe MemorySet do
     expect(MemorySet.new.to_a).to eq [memory]
   end
 
+  it 'should retrieve by index' do
+    expect(MemorySet.new([memory])[0]).to eq memory
+  end
+
+  it 'should not include completed tasks when retrieving by index' do
+    completed = stub state: 'complete'
+    expect(MemorySet.new([completed, memory])[0]).to eq memory
+  end
+
   it 'should allow creation of a new memory' do
     Memory.stub all: []
     Memory.should_receive(:create).with description: 'a memory'

@@ -5,7 +5,7 @@ require 'forwardable'
 class MemorySet
   include Enumerable
   extend Forwardable
-  def_delegators :@memories, :[], :each
+  def_delegators :active_memories, :[], :each
 
   def initialize memories = Memory.all
     @memories = memories
