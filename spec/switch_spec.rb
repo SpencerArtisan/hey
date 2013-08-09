@@ -5,14 +5,15 @@ describe SwitchSupport do
     before do
       class Subject
         include SwitchSupport
-        switches { d call: :do_stuff }
+        switch :d do
+          'do stuff'
+        end
       end
       @subject = Subject.new
     end
 
     it 'should call the switch specific method' do
-      expect(@subject).to receive :do_stuff
-      @subject.switches %w{-d}
+      expect(@subject.process %w{-d}).to eq 'do stuff'
     end
   end
 

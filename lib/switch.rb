@@ -1,3 +1,5 @@
+require 'ostruct'
+
 class Switch < BasicObject
   def method_missing m, options
     @switch_methods ||= {}
@@ -29,6 +31,12 @@ class Switch < BasicObject
 end
 
 module SwitchSupport
+  def process args
+    code = args[0][1].to_sym
+    block = self.class.all_switches[code]
+    block.call
+  end
+
   def switches args
     self.class.switches.process self, args
   end
@@ -42,6 +50,14 @@ module SwitchSupport
       @switch ||= Switch.new
       @switch.instance_eval &block if block_given?
       @switch
+    end
+
+    def all_switches
+      @all_switches ||= {}
+    end
+
+    def switch code, &block
+      all_switches[code] = block
     end
   end
 end
