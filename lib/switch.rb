@@ -20,12 +20,6 @@ module SwitchSupport
   end
 
   module ClassMethods
-    def switches &block
-      @switch ||= Switch.new
-      @switch.instance_eval &block if block_given?
-      @switch
-    end
-
     def all_switches
       @all_switches ||= {}
     end
