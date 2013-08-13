@@ -15,10 +15,6 @@ module SwitchSupport
     args[0][1].to_sym
   end
 
-  def switches args
-    self.class.switches.process self, args
-  end
-
   def self.included(base)                                                         
     base.extend ClassMethods
   end
