@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'environment'
 require 'memory_set'
 
 describe MemorySet do
@@ -39,6 +40,20 @@ describe MemorySet do
   it 'should allow deletion of a memory' do
     memory.should_receive :delete
     MemorySet.new([memory]).delete 0
+  end
+
+  describe '#groups' do
+    before do
+      Memory.database CassandraORM::Database.database
+      Memory.delete_all
+    end
+
+    it 'should return a list of groups' do
+      memory_set = MemorySet.new []
+      memory_set.create_group 'first'
+      memory_set.create_group 'second'
+      expect(MemorySet.new.groups).to eq " 0. first\n 1. second"
+    end
   end
 
   describe '#to_s' do

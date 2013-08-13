@@ -13,6 +13,16 @@ describe Hey do
     expect(hey.execute([])).to eq('memory set')
   end
 
+  it 'should retrieve a list of groups' do
+    memory_set.stub(:groups).and_return 'groups'
+    expect(hey.execute(%w{-g})).to eq('groups')
+  end
+
+  it 'should add a new group' do
+    expect(memory_set).to receive(:create_group).with('a group')
+    hey.execute %w{-g a group}
+  end
+
   it 'should retrieve a list of items in a group' do
     pending
     memory_set.stub(:to_s).with('Projects').and_return 'memory set'

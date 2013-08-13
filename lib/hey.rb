@@ -6,32 +6,40 @@ class Hey
   include SwitchSupport
 
   switch :f do
-    MemorySet.new.to_s_full
+    memories.to_s_full
+  end
+
+  switch :g do |args|
+    if args.length == 1
+      memories.groups
+    else
+      memories.create_group args[1..-1].join(' ')
+    end
   end
 
   switch :l do |args|
     create_or_update args, priority: 'low'
-    MemorySet.new.to_s
+    memories.to_s
   end
 
   switch :p do |args|
     create_or_update args, priority: 'high'
-    MemorySet.new.to_s
+    memories.to_s
   end
 
   switch :c do |args|
     update id_arg(args), state: 'complete'
-    MemorySet.new.to_s
+    memories.to_s
   end
 
   switch :d do |args|
-    MemorySet.new.delete id_arg(args)
-    MemorySet.new.to_s
+    memories.delete id_arg(args)
+    memories.to_s
   end
 
   switch do |args|
     if args.empty?
-      MemorySet.new.to_s
+      memories.to_s
     else
       create args
     end
@@ -39,12 +47,14 @@ class Hey
 
   switch :h do
     %q{
-       hey                       list items
-       hey an item description   create an item
-       hey -d id                 delete item with given id
-       hey -c id                 complete item with given id
-       hey -l id                 make item with given id low priority
-       hey -p id                 make item with given id high priority
+       hey                        list items
+       hey an item description    create an item
+       hey -d id                  delete item with given id
+       hey -c id                  complete item with given id
+       hey -l id                  make item with given id low priority
+       hey -p id                  make item with given id high priority
+       hey -g                     list groups
+       hey -g a group description create a group
     }
   end
 
@@ -57,11 +67,11 @@ class Hey
   end
 
   def self.create args, properties = {}
-    MemorySet.new.create args.join(' '), properties
+    memories.create args.join(' '), properties
   end
 
   def self.update id, properties = {}
-    MemorySet.new.update id, properties
+    memories.update id, properties
   end
 
   def self.has_id_arg? args
@@ -70,5 +80,9 @@ class Hey
 
   def self.id_arg args
     args[1].to_i
+  end
+
+  def self.memories
+    MemorySet.new
   end
 end

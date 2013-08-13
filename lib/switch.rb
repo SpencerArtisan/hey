@@ -4,6 +4,7 @@ module SwitchSupport
   def execute args = []
     code = has_switch(args) ? get_switch(args) : :default
     block = self.class.all_switches[code]
+    raise "Can't identify switch in '#{args}'" unless block
     block.call args
   end
 

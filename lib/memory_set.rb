@@ -11,6 +11,10 @@ class MemorySet
     @memories = memories
   end
 
+  def create_group description
+    create description, group: 'groups'
+  end
+
   def create description, other_attributes = {}
     Memory.create({description: description}.merge(other_attributes))
   end
@@ -21,6 +25,12 @@ class MemorySet
 
   def update index, params
     self[index].update params
+  end
+
+  def groups
+    memories = @memories.select {|memory| memory.group == 'groups'}
+    memories.sort_by! &:description
+    memories.each_with_index.map {|memory, i| summary(i, memory)}.join "\n"
   end
 
   def to_s
