@@ -12,8 +12,15 @@ class Hey
   switch :g do |args|
     if args.length == 1
       memories.groups
+    elsif has_id_arg?(args)
+      group = memories.group(id_arg(args))
+      if args.length > 2
+        memories.create args[2..-1].join(' '), {group: group.name}
+      end
+      group.list
     else
       memories.create_group args[1..-1].join(' ')
+      memories.groups
     end
   end
 
@@ -54,6 +61,7 @@ class Hey
        hey -l id                  make item with given id low priority
        hey -p id                  make item with given id high priority
        hey -g                     list groups
+       hey -g id                  list items in a group
        hey -g a group description create a group
     }
   end
@@ -75,7 +83,7 @@ class Hey
   end
 
   def self.has_id_arg? args
-    args.length == 2 && args[1].is_integer?
+    args.length > 1 && args[1].is_integer?
   end
 
   def self.id_arg args

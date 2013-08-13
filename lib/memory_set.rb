@@ -1,6 +1,7 @@
 # encoding: utf-8
 require 'memory'
 require 'forwardable'
+require 'ostruct'
 
 class MemorySet
   include Enumerable
@@ -28,9 +29,19 @@ class MemorySet
   end
 
   def groups
+    group_memories.each_with_index.map {|memory, i| summary(i, memory)}.join "\n"
+  end
+
+  def group_memories
     memories = @memories.select {|memory| memory.group == 'groups'}
     memories.sort_by! &:description
-    memories.each_with_index.map {|memory, i| summary(i, memory)}.join "\n"
+  end
+
+  def group id
+    group = group_memories[id]
+    memories = @memories.select {|memory| memory.group == group.description}
+    list = memories.each_with_index.map {|memory, i| summary(i, memory)}.join "\n"
+    OpenStruct.new name: group.description, list: list
   end
 
   def to_s
@@ -42,7 +53,7 @@ class MemorySet
   end
 
   def active_memories
-    @memories.select {|memory| memory.state != 'complete'}
+    @memories.select {|memory| memory.group == nil && memory.state != 'complete'}
   end
 
   def summary index, memory

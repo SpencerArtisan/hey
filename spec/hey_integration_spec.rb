@@ -11,6 +11,17 @@ describe Hey do
     Memory.delete_all
   end
 
+  it 'should retrieve a list of groups' do
+    hey.execute %w{-g a group}
+    expect(hey.execute(%w{-g})).to eq(' 0. a group')
+  end
+
+  it 'should retrieve a list of items in a group' do
+    hey.execute %w{-g a group}
+    hey.execute %w{-g 0 an item}
+    expect(hey.execute(%w{-g 0})).to eq(' 0. an item')
+  end
+
   it 'should retrieve an empty list of items' do
     expect(hey.execute([])).to be_empty
   end

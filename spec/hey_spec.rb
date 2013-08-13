@@ -2,7 +2,7 @@ require 'hey'
 
 describe Hey do
   let (:hey) { Hey.new }
-  let (:memory_set) { double }
+  let (:memory_set) { double.as_null_object }
 
   before do
     MemorySet.stub new: memory_set
@@ -24,9 +24,14 @@ describe Hey do
   end
 
   it 'should retrieve a list of items in a group' do
-    pending
-    memory_set.stub(:to_s).with('Projects').and_return 'memory set'
-    expect(hey.execute(%w{-g Projects})).to eq('memory set')
+    memory_set.stub(:group).with(0).and_return double(list: 'a group')
+    expect(hey.execute(%w{-g 0})).to eq('a group')
+  end
+
+  it 'should add an item to a group' do
+    memory_set.stub(:group).with(0).and_return double(name: 'a group', list: 'a list')
+    memory_set.should_receive(:create).with 'an item', {group: 'a group'}
+    hey.execute %w{-g 0 an item}
   end
 
   it 'should retrieve a list of all items' do

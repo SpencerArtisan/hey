@@ -3,7 +3,7 @@ require 'environment'
 require 'memory_set'
 
 describe MemorySet do
-  let(:memory) { double.as_null_object }
+  let(:memory) { double(group: nil).as_null_object }
 
   it 'should initialise itself with all known memories' do
     Memory.stub all: [memory]
@@ -15,7 +15,7 @@ describe MemorySet do
   end
 
   it 'should not include completed tasks when retrieving by index' do
-    completed = double state: 'complete'
+    completed = double state: 'complete', group: nil
     expect(MemorySet.new([completed, memory])[0]).to eq memory
   end
 
@@ -54,40 +54,55 @@ describe MemorySet do
       memory_set.create_group 'second'
       expect(MemorySet.new.groups).to eq " 0. first\n 1. second"
     end
+
+    it 'should retrieve a group by id' do
+      memory_set = MemorySet.new []
+      memory_set.create_group 'first'
+      memory_set.create_group 'second'
+      expect(MemorySet.new.group(0).name).to eq 'first'
+      expect(MemorySet.new.group(1).name).to eq 'second'
+    end
+
+    it 'should convert a group to a list of items in that group' do
+      memory_set = MemorySet.new []
+      memory_set.create_group 'first'
+      memory_set.create 'an item', group: 'first'
+      expect(MemorySet.new.group(0).list).to eq ' 0. an item'
+    end
   end
 
   describe '#to_s' do
     it 'should display a list of numbered memories' do
-      memory_set = MemorySet.new [double(description: 'first').as_null_object,
-                                  double(description: 'second').as_null_object]
+      memory_set = MemorySet.new [double(description: 'first', group: nil).as_null_object,
+                                  double(description: 'second', group: nil).as_null_object]
       expect(memory_set.to_s).to eq " 0. first\n 1. second"
     end
 
     it 'should not show completed memories' do
-      memory_set = MemorySet.new [double(description: 'first', state: 'complete')]
+      memory_set = MemorySet.new [double(description: 'first', state: 'complete', group: nil)]
       expect(memory_set.to_s).to be_empty
     end
 
     it 'should not show low priority memories' do
-      memory_set = MemorySet.new [double(description: 'first', priority: 'low').as_null_object]
+      memory_set = MemorySet.new [double(description: 'first', priority: 'low', group: nil).as_null_object]
       expect(memory_set.to_s).to be_empty
     end
 
     it 'should highlight high priority memories' do
-      memory_set = MemorySet.new [double(description: 'first', priority: 'high').as_null_object]
+      memory_set = MemorySet.new [double(description: 'first', priority: 'high', group: nil).as_null_object]
       expect(memory_set.to_s).to eq "*0. first"
     end
 
     it 'should number the same way for the full and partial list' do
-      memory_set = MemorySet.new [double(description: 'first', priority: 'low').as_null_object,
-                                  double(description: 'second').as_null_object]
+      memory_set = MemorySet.new [double(description: 'first', priority: 'low', group: nil).as_null_object,
+                                  double(description: 'second', group: nil).as_null_object]
       expect(memory_set.to_s).to eq " 1. second"
     end
   end
 
   describe '#to_s_full' do
     it 'should highlight low priority memories' do
-      memory_set = MemorySet.new [double(description: 'first', priority: 'low').as_null_object]
+      memory_set = MemorySet.new [double(description: 'first', priority: 'low', group: nil).as_null_object]
       expect(memory_set.to_s_full).to eq "↓0. first"
     end
   end
