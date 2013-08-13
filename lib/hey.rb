@@ -48,10 +48,6 @@ class Hey
     }
   end
 
-  def execute args
-    process args
-  end
-
   def self.create_or_update args, properties = {}
     if has_id_arg? args
       update id_arg(args), properties

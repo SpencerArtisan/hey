@@ -1,7 +1,7 @@
 require 'ostruct'
 
 module SwitchSupport
-  def process args = []
+  def execute args = []
     code = has_switch(args) ? get_switch(args) : :default
     block = self.class.all_switches[code]
     block.call args

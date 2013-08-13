@@ -13,7 +13,7 @@ describe SwitchSupport do
     end
 
     it 'should call the switch specific method' do
-      expect(@subject.process %w{-d}).to eq 'do stuff'
+      expect(@subject.execute %w{-d}).to eq 'do stuff'
     end
   end
 
@@ -29,7 +29,7 @@ describe SwitchSupport do
     end
 
     it 'should pass command line args through to the execution block' do
-      expect(@subject.process %w{-d arg1 arg2}).to eq ['-d', 'arg1', 'arg2']
+      expect(@subject.execute %w{-d arg1 arg2}).to eq ['-d', 'arg1', 'arg2']
     end
   end
 
@@ -45,11 +45,11 @@ describe SwitchSupport do
     end
 
     it 'should call the default switch when no args are supplied' do
-      expect(@subject.process %w{}).to eq []
+      expect(@subject.execute %w{}).to eq []
     end
 
     it 'should call the default switch when args are supplied' do
-      expect(@subject.process %w{arg}).to eq ['arg']
+      expect(@subject.execute %w{arg}).to eq ['arg']
     end
   end
 end
