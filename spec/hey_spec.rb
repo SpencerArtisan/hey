@@ -24,11 +24,6 @@ describe Hey do
     expect(hey.execute(%w{-f})).to eq('memory set')
   end
 
-  it 'should create a new item' do
-    memory_set.should_receive(:create).with 'task', priority: 'normal'
-    hey.execute %w{task}
-  end
-
   it 'should create a new low priority item' do
     memory_set.should_receive(:create).with 'task', priority: 'low'
     hey.execute %w{-l task}
@@ -39,8 +34,13 @@ describe Hey do
     hey.execute %w{-p task}
   end
   
+  it 'should create a new item' do
+    memory_set.should_receive(:create).with 'task', {}
+    hey.execute %w{task}
+  end
+
   it 'should create a new multi-word item' do
-    memory_set.should_receive(:create).with 'multi word task', priority: 'normal'
+    memory_set.should_receive(:create).with 'multi word task', {}
     hey.execute %w{multi word task}
   end
 
@@ -60,7 +60,7 @@ describe Hey do
   end
 
   it 'should mark a task as complete' do
-    memory_set.should_receive(:update).with 1, state: :complete
+    memory_set.should_receive(:update).with 1, state: 'complete'
     hey.execute %w{-c 1}
   end
 

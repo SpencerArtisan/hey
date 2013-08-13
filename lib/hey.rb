@@ -10,17 +10,17 @@ class Hey
   end
 
   switch :l do |args|
-    create_or_update args, 'low'
+    create_or_update args, priority: 'low'
     MemorySet.new.to_s
   end
 
   switch :p do |args|
-    create_or_update args, 'high'
+    create_or_update args, priority: 'high'
     MemorySet.new.to_s
   end
 
   switch :c do |args|
-    MemorySet.new.update id_arg(args), state: :complete
+    update id_arg(args), state: 'complete'
     MemorySet.new.to_s
   end
 
@@ -33,7 +33,7 @@ class Hey
     if args.empty?
       MemorySet.new.to_s
     else
-      create args, 'normal'
+      create args
     end
   end
 
@@ -52,20 +52,20 @@ class Hey
     process args
   end
 
-  def self.create_or_update args, priority
+  def self.create_or_update args, properties = {}
     if has_id_arg? args
-      update id_arg(args), priority
+      update id_arg(args), properties
     else
-      create args[1..-1], priority
+      create args[1..-1], properties
     end
   end
 
-  def self.create args, priority
-    MemorySet.new.create args.join(' '), priority: priority
+  def self.create args, properties = {}
+    MemorySet.new.create args.join(' '), properties
   end
 
-  def self.update id, priority
-    MemorySet.new.update id, priority: priority
+  def self.update id, properties = {}
+    MemorySet.new.update id, properties
   end
 
   def self.has_id_arg? args
