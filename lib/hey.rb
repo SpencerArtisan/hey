@@ -45,11 +45,8 @@ class Hey
   end
 
   switch do |args|
-    if args.empty?
-      memories.to_s
-    else
-      create args
-    end
+    create args unless args.empty?
+    memories.to_s
   end
 
   switch :h do
