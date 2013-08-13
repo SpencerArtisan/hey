@@ -5,58 +5,39 @@ require 'ruby_ext'
 class Hey
   include SwitchSupport
 
-  switches do
-    h call: :help
-    l calls: [:low_priority, :list]
-    p calls: [:high_priority, :list]
-    c calls: [:complete, :list]
-    d calls: [:delete, :list]
-    f call: :full_list
-    no_args call: :list
-    default calls: [:create, :list]
-  end
-
-  def execute args
-    switches args
-  end
-
-  def delete args
-    MemorySet.new.delete id_arg(args)
-  end
-
-  def complete args
-    MemorySet.new.update id_arg(args), state: :complete
-  end
-
-  def list args
-    MemorySet.new.to_s
-  end
-
-  def full_list args
+  switch :f do
     MemorySet.new.to_s_full
   end
 
-  def low_priority args
+  switch :l do |args|
     create_or_update args, 'low'
+    MemorySet.new.to_s
   end
 
-  def high_priority args
+  switch :p do |args|
     create_or_update args, 'high'
+    MemorySet.new.to_s
   end
 
-  def create_or_update args, priority
-    if has_id_arg? args
-      MemorySet.new.update id_arg(args), priority: priority
+  switch :c do |args|
+    MemorySet.new.update id_arg(args), state: :complete
+    MemorySet.new.to_s
+  end
+
+  switch :d do |args|
+    MemorySet.new.delete id_arg(args)
+    MemorySet.new.to_s
+  end
+
+  switch do |args|
+    if args.empty?
+      MemorySet.new.to_s
     else
-      MemorySet.new.create args[1..-1].join(' '), priority: priority
+      create args, 'normal'
     end
   end
 
-  def create args
-    MemorySet.new.create args.join(' ')
-  end
-
-  def help args
+  switch :h do
     %q{
        hey                       list items
        hey an item description   create an item
@@ -67,11 +48,31 @@ class Hey
     }
   end
 
-  def has_id_arg? args
+  def execute args
+    process args
+  end
+
+  def self.create_or_update args, priority
+    if has_id_arg? args
+      update id_arg(args), priority
+    else
+      create args[1..-1], priority
+    end
+  end
+
+  def self.create args, priority
+    MemorySet.new.create args.join(' '), priority: priority
+  end
+
+  def self.update id, priority
+    MemorySet.new.update id, priority: priority
+  end
+
+  def self.has_id_arg? args
     args.length == 2 && args[1].is_integer?
   end
 
-  def id_arg args
+  def self.id_arg args
     args[1].to_i
   end
 end

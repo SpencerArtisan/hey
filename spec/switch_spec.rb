@@ -1,7 +1,7 @@
 require 'switch'
 
 describe SwitchSupport do
-  context 'Calling one method' do
+  context 'Execution block' do
     before do
       class Subject
         include SwitchSupport
@@ -17,19 +17,19 @@ describe SwitchSupport do
     end
   end
 
-  context 'Calling many methods' do
+  context 'Arguments' do
     before do
       class Subject
         include SwitchSupport
-        switches { d calls: [:do_stuff, :do_more_stuff] }
+        switch :d do |args|
+           args 
+        end
       end
       @subject = Subject.new
     end
 
-    it 'should call the switch specific method' do
-      expect(@subject).to receive :do_stuff
-      expect(@subject).to receive :do_more_stuff
-      @subject.switches %w{-d}
+    it 'should pass command line args through to the execution block' do
+      expect(@subject.process %w{-d arg1 arg2}).to eq ['-d', 'arg1', 'arg2']
     end
   end
 
@@ -37,29 +37,19 @@ describe SwitchSupport do
     before do
       class Subject
         include SwitchSupport
-        switches { no_args call: :do_stuff }
+        switch do |args|
+          args
+        end
       end
       @subject = Subject.new
     end
 
-    it 'should call the switch specific method' do
-      expect(@subject).to receive :do_stuff
-      @subject.switches %w{}
-    end
-  end
-
-  context 'Calling a default when arguments are supplied' do
-    before do
-      class Subject
-        include SwitchSupport
-        switches { default call: :do_stuff }
-      end
-      @subject = Subject.new
+    it 'should call the default switch when no args are supplied' do
+      expect(@subject.process %w{}).to eq []
     end
 
-    it 'should call the switch specific method' do
-      expect(@subject).to receive :do_stuff
-      @subject.switches %w{some args}
+    it 'should call the default switch when args are supplied' do
+      expect(@subject.process %w{arg}).to eq ['arg']
     end
   end
 end
