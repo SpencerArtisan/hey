@@ -63,6 +63,12 @@ describe Hey do
     hey.execute %w{-c 1}
   end
 
+  it 'should mark multiple tasks as complete' do
+    memory_set.should_receive(:update).with 1, state: 'complete'
+    memory_set.should_receive(:update).with 2, state: 'complete'
+    hey.execute %w{-c 1 2}
+  end
+
   it 'should provide help' do
     expect(hey.execute(%w{-h})).to_not be_nil
   end

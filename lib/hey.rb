@@ -24,7 +24,7 @@ class Hey
   end
 
   switch :c do |args|
-    update id_arg(args), state: 'complete'
+    args[1..-1].each {|id| update id.to_i, state: 'complete'}
     memories.to_colourful_s
   end
 
