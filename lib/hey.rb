@@ -9,20 +9,6 @@ class Hey
     memories.to_s_full
   end
 
-  switch :g do |args|
-    if args.length == 1
-      memories.groups
-    elsif has_id_arg?(args)
-      if args.length > 2
-        memories.create args[2..-1].join(' '), {group: group(id_arg(args)).name}
-      end
-      group(id_arg(args)).list
-    else
-      memories.create_group args[1..-1].join(' ')
-      memories.groups
-    end
-  end
-
   switch :l do |args|
     create_or_update args, priority: 'low'
     memories.to_s
@@ -88,9 +74,5 @@ class Hey
 
   def self.memories
     MemorySet.new
-  end
-
-  def self.group id
-    memories.group id
   end
 end
