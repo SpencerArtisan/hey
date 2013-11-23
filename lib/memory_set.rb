@@ -48,8 +48,16 @@ class MemorySet
     active_memories.each_with_index.map {|memory, i| summary(i, memory) if memory.priority != 'low'}.compact.join "\n"
   end
 
+  def to_colourful_s
+    active_memories.each_with_index.map {|memory, i| colourful_summary(i, memory) if memory.priority != 'low'}.compact.join "\n"
+  end
+
   def to_s_full
     active_memories.each_with_index.map {|memory, i| summary(i, memory)}.join "\n"
+  end
+
+  def to_colourful_s_full
+    active_memories.each_with_index.map {|memory, i| colourful_summary(i, memory)}.join "\n"
   end
 
   def active_memories
@@ -63,5 +71,14 @@ class MemorySet
              else ' '
              end
     "#{marker}#{index}. #{memory.description}"
+  end
+
+  def colourful_summary index, memory
+    text = " #{index}. #{memory.description}"
+    marker = case memory.priority
+             when 'high' then text.red
+             when 'low' then text.yellow
+             else text.green
+             end
   end
 end

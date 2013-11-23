@@ -32,4 +32,20 @@ class String
   def is_integer?
     true if Integer(self) rescue false
   end
+
+  def red
+    colour 31
+  end
+
+  def green
+    colour 32
+  end
+
+  def yellow
+    colour 30
+  end
+
+  def colour code
+    replace "\e[#{code}m#{self}\e[0m"
+  end
 end

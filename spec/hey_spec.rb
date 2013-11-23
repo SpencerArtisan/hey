@@ -9,12 +9,12 @@ describe Hey do
   end
 
   it 'should retrieve a list of the main items' do
-    memory_set.stub to_s: 'memory set'
+    memory_set.stub to_colourful_s: 'memory set'
     expect(hey.execute([])).to eq('memory set')
   end
 
   it 'should retrieve a list of all items' do
-    memory_set.stub to_s_full: 'memory set'
+    memory_set.stub to_colourful_s_full: 'memory set'
     expect(hey.execute(%w{-f})).to eq('memory set')
   end
 

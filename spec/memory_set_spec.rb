@@ -71,6 +71,23 @@ describe MemorySet do
     end
   end
 
+  describe '#to_colourful_s' do
+    it 'should display normal priority memories in green' do
+      memory_set = MemorySet.new [double(description: 'first', group: nil).as_null_object]
+      expect(memory_set.to_colourful_s).to eq " 0. first".green
+    end
+
+    it 'should display high priority memories in red' do
+      memory_set = MemorySet.new [double(description: 'first', group: nil, priority: 'high').as_null_object]
+      expect(memory_set.to_colourful_s).to eq " 0. first".red
+    end
+
+    it 'should display low priority memories in yellow' do
+      memory_set = MemorySet.new [double(description: 'first', group: nil, priority: 'low').as_null_object]
+      expect(memory_set.to_colourful_s_full).to eq " 0. first".yellow
+    end
+  end
+
   describe '#to_s' do
     it 'should display a list of numbered memories' do
       memory_set = MemorySet.new [double(description: 'first', group: nil).as_null_object,

@@ -6,32 +6,32 @@ class Hey
   include SwitchSupport
 
   switch :f do
-    memories.to_s_full
+    memories.to_colourful_s_full
   end
 
   switch :l do |args|
     create_or_update args, priority: 'low'
-    memories.to_s
+    memories.to_colourful_s
   end
 
   switch :p do |args|
     create_or_update args, priority: 'high'
-    memories.to_s
+    memories.to_colourful_s
   end
 
   switch :c do |args|
     update id_arg(args), state: 'complete'
-    memories.to_s
+    memories.to_colourful_s
   end
 
   switch :d do |args|
     memories.delete id_arg(args)
-    memories.to_s
+    memories.to_colourful_s
   end
 
   switch do |args|
     create args unless args.empty?
-    memories.to_s
+    memories.to_colourful_s
   end
 
   switch :h do
