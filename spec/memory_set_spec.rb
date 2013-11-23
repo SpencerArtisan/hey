@@ -115,6 +115,12 @@ describe MemorySet do
                                   double(description: 'second', group: nil).as_null_object]
       expect(memory_set.to_s).to eq " 1. second"
     end
+
+    it 'should be able to show only low priority memories' do
+      memory_set = MemorySet.new [double(description: 'first', priority: 'low', group: nil).as_null_object,
+                                  double(description: 'second', group: nil).as_null_object]
+      expect(memory_set.to_colourful_s_low).to eq " 0. first".yellow
+    end
   end
 
   describe '#to_s_full' do

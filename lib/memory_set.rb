@@ -60,6 +60,10 @@ class MemorySet
     active_memories.each_with_index.map {|memory, i| colourful_summary(i, memory)}.join "\n"
   end
 
+  def to_colourful_s_low
+    active_memories.each_with_index.map {|memory, i| colourful_summary(i, memory) if memory.priority == 'low'}.compact.join "\n"
+  end
+
   def active_memories
     @memories.select {|memory| memory.group == nil && memory.state != 'complete'}
   end

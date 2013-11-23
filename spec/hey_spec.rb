@@ -18,6 +18,11 @@ describe Hey do
     expect(hey.execute(%w{-f})).to eq('memory set')
   end
 
+  it 'should retrieve a list of low priority items' do
+    memory_set.stub to_colourful_s_low: 'memory set'
+    expect(hey.execute(%w{-l})).to eq('memory set')
+  end
+
   it 'should create a new low priority item' do
     memory_set.should_receive(:create).with 'task', priority: 'low'
     hey.execute %w{-l task}

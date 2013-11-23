@@ -10,8 +10,12 @@ class Hey
   end
 
   switch :l do |args|
-    create_or_update args, priority: 'low'
-    memories.to_colourful_s
+    if args.length == 1
+      memories.to_colourful_s_low
+    else
+      create_or_update args, priority: 'low'
+      memories.to_colourful_s
+    end
   end
 
   switch :p do |args|
@@ -42,9 +46,6 @@ class Hey
        hey -c id                  complete item with given id
        hey -l id                  make item with given id low priority
        hey -p id                  make item with given id high priority
-       hey -g                     list groups
-       hey -g id                  list items in a group
-       hey -g a group description create a group
     }
   end
 
