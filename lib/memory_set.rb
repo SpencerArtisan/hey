@@ -20,12 +20,12 @@ class MemorySet
     Memory.create({description: description}.merge(other_attributes))
   end
 
-  def delete index
-    self[index].delete
+  def delete indices
+    indices.each {|index| self[index].delete}
   end
 
-  def update index, params
-    self[index].update params
+  def update indices, params
+    indices.each {|index| self[index].update(params)}
   end
 
   def groups

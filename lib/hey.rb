@@ -24,12 +24,12 @@ class Hey
   end
 
   switch :c do |args|
-    args[1..-1].each {|id| update id.to_i, state: 'complete'}
+    update id_args(args), state: 'complete'
     memories.to_colourful_s
   end
 
   switch :d do |args|
-    memories.delete id_arg(args)
+    memories.delete id_args(args)
     memories.to_colourful_s
   end
 
@@ -51,7 +51,7 @@ class Hey
 
   def self.create_or_update args, properties = {}
     if has_id_arg? args
-      update id_arg(args), properties
+      update id_args(args), properties
     else
       create args[1..-1], properties
     end
@@ -69,8 +69,8 @@ class Hey
     args.length > 1 && args[1].is_integer?
   end
 
-  def self.id_arg args
-    args[1].to_i
+  def self.id_args args
+    args[1..-1].map(&:to_i)
   end
 
   def self.memories

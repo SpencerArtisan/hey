@@ -44,28 +44,27 @@ describe Hey do
   end
 
   it 'should delete an item' do
-    memory_set.should_receive(:delete).with 1
+    memory_set.should_receive(:delete).with [1]
     hey.execute %w{-d 1}
   end
 
   it 'should mark a task as low priority' do
-    memory_set.should_receive(:update).with 1, priority: 'low'
+    memory_set.should_receive(:update).with [1], priority: 'low'
     hey.execute %w{-l 1}
   end
 
   it 'should mark a task as high priority' do
-    memory_set.should_receive(:update).with 1, priority: 'high'
+    memory_set.should_receive(:update).with [1], priority: 'high'
     hey.execute %w{-p 1}
   end
 
   it 'should mark a task as complete' do
-    memory_set.should_receive(:update).with 1, state: 'complete'
+    memory_set.should_receive(:update).with [1], state: 'complete'
     hey.execute %w{-c 1}
   end
 
   it 'should mark multiple tasks as complete' do
-    memory_set.should_receive(:update).with 1, state: 'complete'
-    memory_set.should_receive(:update).with 2, state: 'complete'
+    memory_set.should_receive(:update).with [1, 2], state: 'complete'
     hey.execute %w{-c 1 2}
   end
 

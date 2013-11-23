@@ -4,6 +4,7 @@ require 'memory_set'
 
 describe MemorySet do
   let(:memory) { double(group: nil).as_null_object }
+  let(:memory2) { double(group: nil).as_null_object }
 
   it 'should initialise itself with all known memories' do
     Memory.stub all: [memory]
@@ -34,12 +35,25 @@ describe MemorySet do
   it 'should allow updating a memory' do
     update_params = double
     memory.should_receive(:update).with update_params
-    MemorySet.new([memory]).update 0, update_params
+    MemorySet.new([memory]).update [0], update_params
+  end
+
+  it 'should allow updating multiple memories' do
+    update_params = double
+    memory.should_receive(:update).with update_params
+    memory2.should_receive(:update).with update_params
+    MemorySet.new([memory, memory2]).update [0, 1], update_params
   end
 
   it 'should allow deletion of a memory' do
     memory.should_receive :delete
-    MemorySet.new([memory]).delete 0
+    MemorySet.new([memory]).delete [0]
+  end
+
+  it 'should allow deletion of multiple memories' do
+    memory.should_receive :delete
+    memory2.should_receive :delete
+    MemorySet.new([memory, memory2]).delete [0, 1]
   end
 
   describe '#groups' do
