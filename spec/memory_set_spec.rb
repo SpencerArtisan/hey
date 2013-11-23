@@ -3,8 +3,8 @@ require 'environment'
 require 'memory_set'
 
 describe MemorySet do
-  let(:memory) { double(group: nil).as_null_object }
-  let(:memory2) { double(group: nil).as_null_object }
+  let(:memory) { double(description: 'memory', group: nil).as_null_object }
+  let(:memory2) { double(description: 'memory2', group: nil).as_null_object }
 
   it 'should initialise itself with all known memories' do
     Memory.stub all: [memory]
@@ -16,7 +16,7 @@ describe MemorySet do
   end
 
   it 'should not include completed tasks when retrieving by index' do
-    completed = double state: 'complete', group: nil
+    completed = double state: 'complete', group: nil, description: 'task'
     expect(MemorySet.new([completed, memory])[0]).to eq memory
   end
 

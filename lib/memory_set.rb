@@ -9,7 +9,7 @@ class MemorySet
   def_delegators :active_memories, :[], :each
 
   def initialize memories = Memory.all
-    @memories = memories
+    @memories = memories.sort {|a,b| a.description <=> b.description}
   end
 
   def create_group description
