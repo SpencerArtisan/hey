@@ -38,11 +38,11 @@ class String
   end
 
   def green
-    colour 32
+    colour 36
   end
 
   def yellow
-    colour 30
+    colour 96
   end
 
   def colour code
