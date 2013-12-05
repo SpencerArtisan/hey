@@ -12,7 +12,7 @@ module CassandraORM
 
     def initialize params = {}
       params = self.class.defaults.merge(params) if self.class.defaults
-      params.each {|k,v| instance_eval("@#{k} = '#{v}'")}
+      params.each {|k,v| send("#{k}=", v)}
     end
 
     def delete

@@ -1,4 +1,5 @@
 require 'cassandra_orm/persistable'
+require 'timecop'
 
 module CassandraORM
   class TestPersistable
@@ -13,6 +14,7 @@ module CassandraORM
     before do
       TestPersistable.database database
       CassandraCQL::UUID.stub new: (double to_guid: 'a guid')
+      Timecop.freeze
     end
 
     describe '#new' do
@@ -21,6 +23,11 @@ module CassandraORM
         expect(subject.id).to eq 'an id'
         expect(subject.field1).to eq 'field1'
         expect(subject.field2).to eq 'field2'
+      end
+
+      it 'should support Time properties' do
+        subject = TestPersistable.new field1: Time.now
+        expect(subject.field1).to eq Time.now
       end
 
       it 'should have defaults' do
