@@ -59,12 +59,12 @@ describe Hey do
   end
 
   it 'should mark a task as complete' do
-    memory_set.should_receive(:update).with [1], state: 'complete'
+    memory_set.should_receive(:complete).with [1]
     hey.execute %w{-c 1}
   end
 
   it 'should mark multiple tasks as complete' do
-    memory_set.should_receive(:update).with [1, 2], state: 'complete'
+    memory_set.should_receive(:complete).with [1, 2]
     hey.execute %w{-c 1 2}
   end
 

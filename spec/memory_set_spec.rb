@@ -56,6 +56,17 @@ describe MemorySet do
     MemorySet.new([memory, memory2]).delete [0, 1]
   end
 
+  it 'should allow completion of a memory' do
+    memory.should_receive :complete
+    MemorySet.new([memory]).complete [0]
+  end
+
+  it 'should allow completion of multiple memories' do
+    memory.should_receive :complete
+    memory2.should_receive :complete
+    MemorySet.new([memory, memory2]).complete [0, 1]
+  end
+
   describe '#groups' do
     before do
       Memory.database CassandraORM::Database.database

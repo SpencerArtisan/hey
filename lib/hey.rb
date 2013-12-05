@@ -24,7 +24,7 @@ class Hey
   end
 
   switch :c do |args|
-    update id_args(args), state: 'complete'
+    memories.complete id_args(args)
     memories.to_colourful_s
   end
 

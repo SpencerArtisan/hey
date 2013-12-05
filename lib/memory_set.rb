@@ -24,6 +24,10 @@ class MemorySet
     indices.each {|index| self[index].delete}
   end
 
+  def complete indices
+    indices.each {|index| self[index].complete}
+  end
+
   def update indices, params
     indices.each {|index| self[index].update(params)}
   end
