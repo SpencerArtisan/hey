@@ -52,6 +52,7 @@ module CassandraORM
         columns = params.keys.join ','
         values = params.values.map {|value| "'#{value}'"}.join ','
         database.execute "INSERT INTO #{column_family} (#{columns}) VALUES (#{values})"
+        retrieve params[:id]
       end
 
       def assign_id params

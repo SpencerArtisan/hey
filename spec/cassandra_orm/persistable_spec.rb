@@ -33,6 +33,8 @@ module CassandraORM
     describe '#create' do
       it 'should be saved to the database' do
         database.should_receive(:execute).with "INSERT INTO testpersistable (id,field1,field2) VALUES ('a guid','field1','field2')"
+        row = double(fetch_row: (double to_hash: {}))
+        database.should_receive(:execute).with("SELECT * FROM testpersistable WHERE id='a guid'").and_return row
         TestPersistable.create field1: 'field1', field2: 'field2'
       end
     end
