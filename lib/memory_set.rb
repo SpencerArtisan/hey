@@ -91,7 +91,7 @@ class MemorySet
   end
 
   def completed_memories
-    @memories.select {|memory| memory.state == 'complete' && memory.completed_on}.sort_by! &:completed_on
+    @memories.select {|memory| memory.state == 'complete' && memory.completed_on}.sort_by!(&:completed_on).reverse
   end
 
   def summary index, memory
