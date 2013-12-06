@@ -23,6 +23,11 @@ describe Hey do
     expect(hey.execute(%w{-l})).to eq('memory set')
   end
 
+  it 'should show a list of recently completed items' do
+    memory_set.stub recently_completed: 'memory set'
+    expect(hey.execute(%w{-r})).to eq('memory set')
+  end
+
   it 'should create a new low priority item' do
     memory_set.should_receive(:create).with 'task', priority: 'low'
     hey.execute %w{-l task}

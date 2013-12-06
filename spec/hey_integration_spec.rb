@@ -53,6 +53,10 @@ describe Hey do
     hey.execute %w{-c 0}
   end
 
+  it 'should show recently completed tasks' do
+    hey.execute %w{-r}
+  end
+
   it 'should provide help' do
     expect(hey.execute(%w{-h})).to_not be_nil
   end

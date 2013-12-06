@@ -48,6 +48,24 @@ class MemorySet
     OpenStruct.new name: group.description, list: list
   end
 
+  def recently_completed
+    output = ""
+    last_header = nil
+    completed_memories.each do |memory| 
+      header = completed_header(memory)
+      output << header if header != last_header 
+      last_header = header
+      output << " "
+      output << memory.description
+      output << "\n"
+    end
+    output
+  end
+
+  def completed_header memory
+    memory.completed_on.strftime("%A %-d %B") + "\n"
+  end
+
   def to_s
     active_memories.each_with_index.map {|memory, i| summary(i, memory) if memory.priority != 'low'}.compact.join "\n"
   end
@@ -70,6 +88,10 @@ class MemorySet
 
   def active_memories
     @memories.select {|memory| memory.group == nil && memory.state != 'complete'}
+  end
+
+  def completed_memories
+    @memories.select {|memory| memory.state == 'complete' && memory.completed_on}
   end
 
   def summary index, memory

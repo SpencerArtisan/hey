@@ -9,6 +9,10 @@ class Hey
     memories.to_colourful_s_full
   end
 
+  switch :r do
+    memories.recently_completed
+  end
+
   switch :l do |args|
     if args.length == 1
       memories.to_colourful_s_low
@@ -42,10 +46,11 @@ class Hey
     %q{
        hey                        list items
        hey an item description    create an item
-       hey -d id                  delete item with given id
-       hey -c id                  complete item with given id
-       hey -l id                  make item with given id low priority
-       hey -p id                  make item with given id high priority
+       hey -d id [other ids]      delete item with given id
+       hey -c id [other ids]      complete item with given id
+       hey -l id [other ids]      make item with given id low priority
+       hey -p id [other ids]      make item with given id high priority
+       hey -r                     show recently completed items
     }
   end
 

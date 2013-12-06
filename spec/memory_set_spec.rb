@@ -1,6 +1,7 @@
 # encoding: utf-8
 require 'environment'
 require 'memory_set'
+require 'timecop'
 
 describe MemorySet do
   let(:memory) { double(description: 'memory', group: nil).as_null_object }
@@ -114,6 +115,45 @@ describe MemorySet do
   end
 
   describe '#to_s' do
+    it 'should not display recently completed memories with blank completion dates' do
+      Timecop.freeze(Time.local(2013, 12, 5, 14, 14, 0))
+      memory_set = MemorySet.new [double(description: 'first', state: 'complete', completed_on: nil)]
+      expect(memory_set.recently_completed).to eq ""
+    end
+
+    it 'should display recently completed memories for completions today' do
+      Timecop.freeze(Time.local(2013, 12, 5, 14, 14, 0))
+      memory_set = MemorySet.new [double(description: 'first', state: 'complete', completed_on: Time.now)]
+      expect(memory_set.recently_completed).to eq "Thursday 5 December\n first\n"
+    end
+
+    it 'should display recently completed memories for completions yesterday' do
+      Timecop.freeze(Time.local(2013, 12, 5, 14, 14, 0))
+      memory_set = MemorySet.new [double(description: 'first', state: 'complete', completed_on: Time.now - 60*60*24)]
+      expect(memory_set.recently_completed).to eq "Wednesday 4 December\n first\n"
+    end
+
+    it 'should display recently completed memories for two memories completed on different dates' do
+      Timecop.freeze(Time.local(2013, 12, 5, 14, 14, 0))
+      memory_set = MemorySet.new [double(description: 'first', state: 'complete', completed_on: Time.now),
+                                  double(description: 'second', state: 'complete', completed_on: Time.now - 60*60*24)]
+      expect(memory_set.recently_completed).to eq "Thursday 5 December\n first\nWednesday 4 December\n second\n"
+    end
+
+    it 'should display most recently completed memories first' do
+      Timecop.freeze(Time.local(2013, 12, 5, 14, 14, 0))
+      memory_set = MemorySet.new [double(description: 'second', state: 'complete', completed_on: Time.now - 60*60*24),
+                                  double(description: 'first', state: 'complete', completed_on: Time.now)]
+      expect(memory_set.recently_completed).to eq "Thursday 5 December\n first\nWednesday 4 December\n second\n"
+    end
+
+    it 'should display recently completed memories for two memories completed on the same date' do
+      Timecop.freeze(Time.local(2013, 12, 5, 14, 14, 0))
+      memory_set = MemorySet.new [double(description: 'first', state: 'complete', completed_on: Time.now),
+                                  double(description: 'second', state: 'complete', completed_on: Time.now)]
+      expect(memory_set.recently_completed).to eq "Thursday 5 December\n first\n second\n"
+    end
+
     it 'should display a list of numbered memories' do
       memory_set = MemorySet.new [double(description: 'first', group: nil).as_null_object,
                                   double(description: 'second', group: nil).as_null_object]
