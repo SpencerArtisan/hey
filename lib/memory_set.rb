@@ -56,14 +56,14 @@ class MemorySet
       output << header if header != last_header 
       last_header = header
       output << " "
-      output << memory.description
+      output << memory.description.green
       output << "\n"
     end
     output
   end
 
   def completed_header memory
-    memory.completed_on.strftime("%A %-d %B") + "\n"
+    memory.completed_on.strftime("%A %-d %B").inverse_green + "\n"
   end
 
   def to_s
@@ -91,7 +91,7 @@ class MemorySet
   end
 
   def completed_memories
-    @memories.select {|memory| memory.state == 'complete' && memory.completed_on}
+    @memories.select {|memory| memory.state == 'complete' && memory.completed_on}.sort_by! &:completed_on
   end
 
   def summary index, memory

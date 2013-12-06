@@ -45,6 +45,10 @@ class String
     colour 96
   end
 
+  def inverse_green
+    colour 46
+  end
+
   def colour code
     replace "\e[#{code}m#{self}\e[0m"
   end
