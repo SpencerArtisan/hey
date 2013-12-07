@@ -29,7 +29,7 @@ class Hey
 
   switch :c do |args|
     memories.complete id_args(args)
-    memories.to_colourful_s
+    memories.recently_completed
   end
 
   switch :d do |args|
