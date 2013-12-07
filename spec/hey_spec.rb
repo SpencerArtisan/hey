@@ -53,6 +53,11 @@ describe Hey do
     hey.execute %w{-d 1}
   end
 
+  it 'should delete complete items' do
+    memory_set.should_receive(:delete_complete)
+    hey.execute %w{-D}
+  end
+
   it 'should mark a task as low priority' do
     memory_set.should_receive(:update).with [1], priority: 'low'
     hey.execute %w{-l 1}

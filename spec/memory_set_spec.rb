@@ -46,6 +46,18 @@ describe MemorySet do
     MemorySet.new([memory, memory2]).update [0, 1], update_params
   end
 
+  it 'should allow deletion of complete memories' do
+    memory.stub state: 'complete'
+    memory.should_receive :delete
+    MemorySet.new([memory]).delete_complete
+  end
+
+  it 'should not allow deletion of incomplete memories' do
+    memory.stub state: 'a state'
+    memory.should_not_receive :delete
+    MemorySet.new([memory]).delete_complete
+  end
+
   it 'should allow deletion of a memory' do
     memory.should_receive :delete
     MemorySet.new([memory]).delete [0]

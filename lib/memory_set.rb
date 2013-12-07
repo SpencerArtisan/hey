@@ -24,6 +24,10 @@ class MemorySet
     indices.each {|index| self[index].delete}
   end
 
+  def delete_complete
+    @memories.each {|memory| memory.delete if memory.state == 'complete'}
+  end
+
   def complete indices
     indices.each {|index| self[index].complete}
   end

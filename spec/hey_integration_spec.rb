@@ -43,6 +43,19 @@ describe Hey do
     hey.execute %w{-d 0}
   end
 
+  it 'should not delete incomplete items' do
+    hey.execute %w{task}
+    hey.execute %w{-D}
+    expect(hey.execute([])).to eq(" 0. task".green)
+  end
+
+  it 'should delete all completed items' do
+    hey.execute %w{task}
+    hey.execute %w{-c task}
+    hey.execute %w{-D}
+    expect(hey.execute(%w{-r})).to eq("")
+  end
+
   it 'should mark a task as high priority' do
     hey.execute %w{task}
     hey.execute %w{-p 0}
