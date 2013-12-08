@@ -51,6 +51,7 @@ GEM
       ffi (>= 0.5.0)
     rb-kqueue (0.2.0)
       ffi (>= 0.5.0)
+    redis (3.0.6)
     rspec (2.14.0)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
@@ -80,6 +81,7 @@ DEPENDENCIES
   cassandra-cql
   guard-rspec
   main
+  redis
   rspec (= 2.14)
   sinatra
   timecop
