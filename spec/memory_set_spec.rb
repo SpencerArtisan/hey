@@ -90,7 +90,7 @@ describe MemorySet do
       memory_set = MemorySet.new []
       memory_set.create_group 'first'
       memory_set.create_group 'second'
-      expect(MemorySet.new.groups).to eq " 0. first\n 1. second"
+      expect(MemorySet.new.groups).to eq " 0. first".green + "\n" + " 1. second".green
     end
 
     it 'should retrieve a group by id' do
@@ -105,28 +105,26 @@ describe MemorySet do
       memory_set = MemorySet.new []
       memory_set.create_group 'first'
       memory_set.create 'an item', group: 'first'
-      expect(MemorySet.new.group(0).list).to eq ' 0. an item'
-    end
-  end
-
-  describe '#to_colourful_s' do
-    it 'should display normal priority memories in green' do
-      memory_set = MemorySet.new [double(description: 'first', group: nil).as_null_object]
-      expect(memory_set.to_colourful_s).to eq " 0. first".green
-    end
-
-    it 'should display high priority memories in red' do
-      memory_set = MemorySet.new [double(description: 'first', group: nil, priority: 'high').as_null_object]
-      expect(memory_set.to_colourful_s).to eq " 0. first".red
-    end
-
-    it 'should display low priority memories in yellow' do
-      memory_set = MemorySet.new [double(description: 'first', group: nil, priority: 'low').as_null_object]
-      expect(memory_set.to_colourful_s_full).to eq " 0. first".yellow
+      expect(MemorySet.new.group(0).list).to eq ' 0. an item'.green
     end
   end
 
   describe '#to_s' do
+    it 'should display normal priority memories in green' do
+      memory_set = MemorySet.new [double(description: 'first', group: nil).as_null_object]
+      expect(memory_set.to_s).to eq " 0. first".green
+    end
+
+    it 'should display high priority memories in red' do
+      memory_set = MemorySet.new [double(description: 'first', group: nil, priority: 'high').as_null_object]
+      expect(memory_set.to_s).to eq " 0. first".red
+    end
+
+    it 'should display low priority memories in yellow' do
+      memory_set = MemorySet.new [double(description: 'first', group: nil, priority: 'low').as_null_object]
+      expect(memory_set.to_s_full).to eq " 0. first".yellow
+    end
+
     it 'should not display recently completed memories with blank completion dates' do
       Timecop.freeze(Time.local(2013, 12, 5, 14, 14, 0))
       memory_set = MemorySet.new [double(description: 'first', state: 'complete', completed_on: nil)]
@@ -176,7 +174,7 @@ describe MemorySet do
     it 'should display a list of numbered memories' do
       memory_set = MemorySet.new [double(description: 'first', group: nil).as_null_object,
                                   double(description: 'second', group: nil).as_null_object]
-      expect(memory_set.to_s).to eq " 0. first\n 1. second"
+      expect(memory_set.to_s).to eq " 0. first".green + "\n" + " 1. second".green
     end
 
     it 'should not show completed memories' do
@@ -189,28 +187,16 @@ describe MemorySet do
       expect(memory_set.to_s).to be_empty
     end
 
-    it 'should highlight high priority memories' do
-      memory_set = MemorySet.new [double(description: 'first', priority: 'high', group: nil).as_null_object]
-      expect(memory_set.to_s).to eq "*0. first"
-    end
-
     it 'should number the same way for the full and partial list' do
       memory_set = MemorySet.new [double(description: 'first', priority: 'low', group: nil).as_null_object,
                                   double(description: 'second', group: nil).as_null_object]
-      expect(memory_set.to_s).to eq " 1. second"
+      expect(memory_set.to_s).to eq " 1. second".green
     end
 
     it 'should be able to show only low priority memories' do
       memory_set = MemorySet.new [double(description: 'first', priority: 'low', group: nil).as_null_object,
                                   double(description: 'second', group: nil).as_null_object]
-      expect(memory_set.to_colourful_s_low).to eq " 0. first".yellow
-    end
-  end
-
-  describe '#to_s_full' do
-    it 'should highlight low priority memories' do
-      memory_set = MemorySet.new [double(description: 'first', priority: 'low', group: nil).as_null_object]
-      expect(memory_set.to_s_full).to eq "↓0. first"
+      expect(memory_set.to_s_low).to eq " 0. first".yellow
     end
   end
 end

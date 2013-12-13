@@ -6,7 +6,7 @@ class Hey
   include SwitchSupport
 
   switch :f do
-    memories.to_colourful_s_full
+    memories.to_s_full
   end
 
   switch :r do
@@ -15,36 +15,36 @@ class Hey
 
   switch :l do |args|
     if args.length == 1
-      memories.to_colourful_s_low
+      memories.to_s_low
     else
       create_or_update args, priority: 'low'
-      memories.to_colourful_s
+      memories.to_s
     end
   end
 
   switch :p do |args|
     create_or_update args, priority: 'high'
-    memories.to_colourful_s
+    memories.to_s
   end
 
   switch :c do |args|
     memories.complete id_args(args)
-    memories.recently_completed
+    memories.recently_completed + "Remaining".inverse_green + "\n" + memories.to_s
   end
 
   switch :d do |args|
     memories.delete id_args(args)
-    memories.to_colourful_s
+    memories.to_s
   end
 
   switch :D do |args|
     memories.delete_complete
-    memories.to_colourful_s
+    memories.to_s
   end
 
   switch do |args|
     create args unless args.empty?
-    memories.to_colourful_s
+    memories.to_s
   end
 
   switch :h do
