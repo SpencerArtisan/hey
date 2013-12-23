@@ -150,17 +150,17 @@ describe MemorySet do
       memory_set = MemorySet.new [double(description: 'first', state: 'complete', completed_on: Time.now),
                                   double(description: 'second', state: 'complete', completed_on: Time.now - 60*60*24)]
       expect(memory_set.recently_completed).to eq(
-        "Thursday 5 December".inverse_green + "\n " + "first".green + "\n" + 
-        "Wednesday 4 December".inverse_green + "\n " + "second".green + "\n")
+        "Wednesday 4 December".inverse_green + "\n " + "second".green + "\n" +
+        "Thursday 5 December".inverse_green + "\n " + "first".green + "\n")
     end
 
-    it 'should display most recently completed memories first' do
+    it 'should display most recently completed memories last' do
       Timecop.freeze(Time.local(2013, 12, 5, 14, 14, 0))
       memory_set = MemorySet.new [double(description: 'second', state: 'complete', completed_on: Time.now - 60*60*24),
                                   double(description: 'first', state: 'complete', completed_on: Time.now)]
       expect(memory_set.recently_completed).to eq(
-        "Thursday 5 December".inverse_green + "\n " + "first".green + "\n" + 
-        "Wednesday 4 December".inverse_green + "\n " + "second".green + "\n")
+        "Wednesday 4 December".inverse_green + "\n " + "second".green + "\n" +
+        "Thursday 5 December".inverse_green + "\n " + "first".green + "\n")
     end
 
     it 'should display recently completed memories for two memories completed on the same date' do
@@ -168,7 +168,7 @@ describe MemorySet do
       memory_set = MemorySet.new [double(description: 'first', state: 'complete', completed_on: Time.now),
                                   double(description: 'second', state: 'complete', completed_on: Time.now)]
       expect(memory_set.recently_completed).to eq(
-        "Thursday 5 December".inverse_green + "\n " + "second".green + "\n " + "first".green + "\n")
+        "Thursday 5 December".inverse_green + "\n " + "first".green + "\n " + "second".green + "\n")
     end
 
     it 'should display a list of numbered memories' do
