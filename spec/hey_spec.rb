@@ -63,6 +63,11 @@ describe Hey do
     hey.execute %w{-l 1}
   end
 
+  it 'should mark a task as medium priority' do
+    memory_set.should_receive(:update).with [1], priority: 'medium'
+    hey.execute %w{-m 1}
+  end
+
   it 'should mark a task as high priority' do
     memory_set.should_receive(:update).with [1], priority: 'high'
     hey.execute %w{-p 1}

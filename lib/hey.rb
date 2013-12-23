@@ -22,6 +22,11 @@ class Hey
     end
   end
 
+  switch :m do |args|
+    create_or_update args, priority: 'medium'
+    memories.to_s
+  end
+
   switch :p do |args|
     create_or_update args, priority: 'high'
     memories.to_s
@@ -49,14 +54,15 @@ class Hey
 
   switch :h do
     %q{
-       hey                        list items
-       hey an item description    create an item
-       hey -c id [other ids]      complete item with given id
-       hey -l id [other ids]      make item with given id low priority
-       hey -p id [other ids]      make item with given id high priority
-       hey -d id [other ids]      delete item with given id
-       hey -D                     delete completed items
-       hey -r                     show recently completed items
+       hey                          list items
+       hey [-l/-p] item description create an item
+       hey -c id [other ids]        complete item with given id
+       hey -l id [other ids]        make item with given id low priority
+       hey -m id [other ids]        make item with given id medium priority
+       hey -p id [other ids]        make item with given id high priority
+       hey -d id [other ids]        delete item with given id
+       hey -D                       delete completed items
+       hey -r                       show recently completed items
     }
   end
 
