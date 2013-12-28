@@ -37,6 +37,11 @@ class Hey
     memories.recently_completed + "Remaining".inverse_green + "\n" + memories.to_s
   end
 
+  switch :s do |args|
+    memories.stash args[1]
+    memories.to_s
+  end
+
   switch :d do |args|
     memories.delete id_args(args)
     memories.to_s
@@ -47,10 +52,15 @@ class Hey
     memories.to_s
   end
 
+  1.upto(9) do |n|
+    module_eval "switch '#{n}' do |args| delay args, #{n}; end"
+  end
+
   switch do |args|
     create args unless args.empty?
     memories.to_s
   end
+
 
   switch :h do
     %q{
@@ -63,7 +73,13 @@ class Hey
        hey -d id [other ids]        delete item with given id
        hey -D                       delete completed items
        hey -r                       show recently completed items
+       hey -s stash_name            stashes all memories
+       hey -[n] id [other ids]      make memory high priority in n day's time
     }
+  end
+
+  def self.delay args, days
+    create_or_update args, appear_on: Date.today + days
   end
 
   def self.create_or_update args, properties = {}

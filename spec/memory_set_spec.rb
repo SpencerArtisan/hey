@@ -46,6 +46,20 @@ describe MemorySet do
     MemorySet.new([memory, memory2]).update [0, 1], update_params
   end
 
+  it 'should allow a new memory to appear in the future' do
+    Memory.stub all: []
+    date = Date.new
+    Memory.should_receive(:create).with description: 'a memory', appear_on: date
+    MemorySet.new.create 'a memory', appear_on: date
+  end
+
+  it 'should allow an existing memory to appear in the future' do
+    date = Date.new
+    memory.should_receive(:update).with appear_on: date
+    memory2.should_receive(:update).with appear_on: date
+    MemorySet.new([memory, memory2]).update [0, 1], appear_on: date
+  end
+
   it 'should allow deletion of complete memories' do
     memory.stub state: 'complete'
     memory.should_receive :delete
@@ -84,6 +98,20 @@ describe MemorySet do
     before do
       Memory.database CassandraORM::Database.database
       Memory.delete_all
+    end
+
+    it 'should stash the items in a group' do
+      memory = double(description: 'an item', group: nil).as_null_object
+      memory_set = MemorySet.new [memory]
+      expect(memory).to receive(:update).with group: 'a stash'
+      memory_set.stash 'a stash'
+    end
+
+    it 'should unstash the items from a group' do
+      memory = double(description: 'an item', group: 'a stash').as_null_object
+      memory_set = MemorySet.new [memory]
+      expect(memory).to receive(:update).with group: nil
+      memory_set.unstash 'a stash'
     end
 
     it 'should return a list of groups' do

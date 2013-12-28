@@ -12,6 +12,15 @@ class MemorySet
     @memories = memories.sort {|a,b| a.description <=> b.description}
   end
 
+  def stash group
+    create_group group
+    memories_in_group(nil).each {|memory| memory.update group: group}
+  end
+
+  def unstash group
+    memories_in_group(group).each {|memory| memory.update group: nil}
+  end
+
   def create_group description
     create description, group: 'groups'
   end
@@ -45,9 +54,17 @@ class MemorySet
     memories.sort_by! &:description
   end
 
+  def memories_in_group group
+    memories = @memories.select {|memory| memory.group == group}
+    puts "Memories in group '#{group}': #{memories}"
+    memories.sort_by! &:description
+  end
+
   def group id
     group = group_memories[id]
     memories = @memories.select {|memory| memory.group == group.description}
+    puts ">"
+    puts memories
     list = memories.each_with_index.map {|memory, i| summary(i, memory)}.join "\n"
     OpenStruct.new name: group.description, list: list
   end

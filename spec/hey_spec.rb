@@ -73,6 +73,16 @@ describe Hey do
     hey.execute %w{-p 1}
   end
 
+  it 'should mark a task as appearing tomorrow' do
+    memory_set.should_receive(:update).with [1], appear_on: Date.today + 1
+    hey.execute %w{-1 1}
+  end
+
+  it 'should mark a task as appearing the day after tomorrow' do
+    memory_set.should_receive(:update).with [1], appear_on: Date.today + 2
+    hey.execute %w{-2 1}
+  end
+
   it 'should mark a task as complete' do
     memory_set.should_receive(:complete).with [1]
     hey.execute %w{-c 1}
@@ -81,6 +91,11 @@ describe Hey do
   it 'should mark multiple tasks as complete' do
     memory_set.should_receive(:complete).with [1, 2]
     hey.execute %w{-c 1 2}
+  end
+
+  it 'should stash all tasks' do
+    memory_set.should_receive(:stash).with 'name'
+    hey.execute %w{-s name}
   end
 
   it 'should provide help' do
