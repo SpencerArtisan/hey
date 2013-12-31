@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'ruby_ext'
 require 'memory'
 require 'forwardable'
 require 'ostruct'
@@ -9,7 +10,7 @@ class MemorySet
   def_delegators :active_memories, :[], :each
 
   def initialize memories = Memory.all
-    memories.each {|memory| memory.update priority: 'high' if memory.appear_on && memory.appear_on >= Date.today}
+    memories.each {|memory| memory.update priority: 'high' if memory.appear_on && memory.appear_on >= Time.now.midnight}
     @memories = memories.sort {|a,b| a.description <=> b.description}
   end
 

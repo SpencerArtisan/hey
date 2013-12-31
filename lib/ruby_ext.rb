@@ -1,3 +1,9 @@
+class Time
+  def midnight
+    Time.new year, month, day, 0, 0, 0, 0
+  end
+end
+
 class Module
   def alias_static_method *names
     names.each do |name|

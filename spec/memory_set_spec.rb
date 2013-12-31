@@ -23,14 +23,14 @@ describe MemorySet do
 
   it 'should change the priority to high on the appear_on date' do
     Memory.stub all: [memory]
-    allow(memory).to receive(:appear_on).and_return Date.today
+    allow(memory).to receive(:appear_on).and_return Time.now.midnight
     expect(memory).to receive(:update).with priority: 'high'
     MemorySet.new
   end
 
   it 'should not change the priority to high before the appear_on date' do
     Memory.stub all: [memory]
-    allow(memory).to receive(:appear_on).and_return Date.today - 1
+    allow(memory).to receive(:appear_on).and_return Time.now.midnight - 1
     expect(memory).not_to receive(:update).with priority: 'high'
     MemorySet.new
   end
