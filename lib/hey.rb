@@ -42,6 +42,11 @@ class Hey
     memories.to_s
   end
 
+  switch :u do |args|
+    memories.unstash args[1]
+    memories.to_s
+  end
+
   switch :d do |args|
     memories.delete id_args(args)
     memories.to_s
@@ -73,7 +78,8 @@ class Hey
        hey -d id [other ids]        delete item with given id
        hey -D                       delete completed items
        hey -r                       show recently completed items
-       hey -s stash_name            stashes all memories
+       hey -s stash_name            stashes all memories to named stash
+       hey -u stash_name            unstashes memories in named stash
        hey -[n] id [other ids]      make memory high priority in n day's time
     }
   end

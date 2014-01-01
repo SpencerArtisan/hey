@@ -98,6 +98,11 @@ describe Hey do
     hey.execute %w{-s name}
   end
 
+  it 'should unstash  tasks' do
+    memory_set.should_receive(:unstash).with 'name'
+    hey.execute %w{-u name}
+  end
+
   it 'should provide help' do
     expect(hey.execute(%w{-h})).to_not be_nil
   end
