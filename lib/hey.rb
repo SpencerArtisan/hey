@@ -58,7 +58,7 @@ class Hey
   end
 
   1.upto(9) do |n|
-    module_eval "switch '#{n}' do |args| delay args, #{n}; end"
+    module_eval "switch '#{n}' do |args| delay args, #{n}; ""; end"
   end
 
   switch do |args|

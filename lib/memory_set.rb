@@ -10,8 +10,14 @@ class MemorySet
   def_delegators :active_memories, :[], :each
 
   def initialize memories = Memory.all
-    memories.each {|memory| memory.update priority: 'high' if memory.appear_on && memory.appear_on >= Time.now.midnight}
     @memories = memories.sort {|a,b| a.description <=> b.description}
+    active_memories.each do |memory| 
+      if memory.appear_on then
+        priority = memory.appear_on <= Time.now.midnight ? 'high' : 'low'
+        memory.update priority: priority
+      end
+    end
+
   end
 
   def stash group
