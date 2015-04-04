@@ -110,7 +110,6 @@ describe MemorySet do
 
   describe '#groups' do
     before do
-      Memory.database CassandraORM::Database.database
       Memory.delete_all
     end
 

@@ -7,8 +7,6 @@ describe Memory do
 
   before do
     Timecop.freeze
-    Memory.database CassandraORM::Database.database
-    CassandraCQL::UUID.stub new: (double to_guid: 'a guid')
   end
 
   it 'should update the state on completing' do
