@@ -44,7 +44,11 @@ class String
   end
 
   def green
-    colour 36
+    colour 32
+  end
+
+  def grey
+    colour 37
   end
 
   def yellow

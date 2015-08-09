@@ -116,7 +116,7 @@ class MemorySet
     text = " #{index}. #{memory.description}"
     marker = case memory.priority
              when 'high' then text.red
-             when 'low' then text.yellow
+             when 'low' then text.grey
              else text.green
              end
   end
