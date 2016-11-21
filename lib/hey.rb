@@ -28,13 +28,18 @@ class Hey
   end
 
   switch :p do |args|
-    create_or_update args, priority: 'high'
-    memories.to_s
+    if args.length == 1
+      memories.to_s_high
+    else
+      create_or_update args, priority: 'high'
+      memories.to_s
+    end
   end
 
   switch :c do |args|
-    memories.complete id_args(args)
-    memories.recently_completed + "Remaining".inverse_green + "\n" + memories.to_s
+    not_all_high = memories.complete id_args(args)
+    remaining = not_all_high ? memories.to_s : memories.to_s_high
+    memories.recently_completed + "Remaining".inverse_green + "\n" + remaining
   end
 
   switch :d do |args|

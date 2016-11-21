@@ -46,7 +46,9 @@ class MemorySet
   end
 
   def complete indices
+    not_all_high = indices.any? {|index| self[index].priority != 'high'}
     indices.each {|index| self[index].complete}
+    not_all_high
   end
 
   def update indices, params
@@ -104,6 +106,10 @@ class MemorySet
     active_memories.each_with_index.map {|memory, i| summary(i, memory) if memory.priority == 'low'}.compact.join "\n"
   end
 
+  def to_s_high
+    active_memories.each_with_index.map {|memory, i| summary(i, memory) if memory.priority == 'high'}.compact.join "\n"
+  end
+
   def active_memories
     @memories.select {|memory| memory.group == nil && memory.state != 'complete'}
   end
@@ -116,7 +122,7 @@ class MemorySet
     text = " #{index}. #{memory.description}"
     marker = case memory.priority
              when 'high' then text.red
-             when 'low' then text.grey
+             when 'low' then text.yellow
              else text.green
              end
   end
