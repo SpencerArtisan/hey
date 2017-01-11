@@ -32,7 +32,7 @@ class Hey
       memories.to_s_high
     else
       create_or_update args, priority: 'high'
-      memories.to_s
+      memories.to_s_high
     end
   end
 
