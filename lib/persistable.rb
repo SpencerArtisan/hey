@@ -1,6 +1,5 @@
 require 'ruby_ext'
 require 'json'
-require 'simple_uuid'
 
 module Persistable
   FILE = ".tasks.json"
