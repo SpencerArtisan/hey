@@ -1,5 +1,6 @@
 require 'ruby_ext'
 require 'json'
+require 'securerandom'
 
 module Persistable
   FILE = ".tasks.json"
@@ -69,7 +70,7 @@ module Persistable
     end
 
     def assign_id params
-      id = SimpleUUID::UUID.new.to_guid
+      id = SecureRandom.uuid
       {'id' => id}.merge params
     end
   end
