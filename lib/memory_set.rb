@@ -109,6 +109,10 @@ class MemorySet
 	  active_memories.each_with_index.map {|memory, i| summary(i, memory) if memory.priority == 'high' || memory.priority == 'highest'}.compact.join "\n"
   end
 
+  def to_s_highest
+	  active_memories.each_with_index.map {|memory, i| summary(i, memory) if  memory.priority == 'highest'}.compact.join "\n"
+  end
+
   def active_memories
     @memories.select {|memory| memory.group == nil && memory.state != 'complete'}
   end

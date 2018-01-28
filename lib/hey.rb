@@ -38,10 +38,10 @@ class Hey
 
   switch :P do |args|
     if args.length == 1
-      memories.to_s_high
+      memories.to_s_highest
     else
       create_or_update args, priority: 'highest'
-      memories.to_s_high
+      memories.to_s_highest
     end
   end
 
