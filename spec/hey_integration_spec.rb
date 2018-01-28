@@ -33,6 +33,11 @@ describe Hey do
     expect(hey.execute([])).to eq(" 0. task".red)
   end
   
+  it 'should create a new highest priority item' do
+    hey.execute %w{-P task}
+    expect(hey.execute([])).to eq(" 0. TASK".red)
+  end
+  
   it 'should create a new multi-word item' do
     hey.execute %w{multi word task}
   end
@@ -45,6 +50,11 @@ describe Hey do
   it 'should mark a task as high priority' do
     hey.execute %w{task}
     hey.execute %w{-p 0}
+  end
+
+  it 'should mark a task as highest priority' do
+    hey.execute %w{task}
+    hey.execute %w{-P 0}
   end
 
   it 'should mark a task as complete' do

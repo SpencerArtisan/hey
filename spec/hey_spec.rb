@@ -38,6 +38,11 @@ describe Hey do
     hey.execute %w{-p task}
   end
   
+  it 'should create a new highest priority item' do
+    memory_set.should_receive(:create).with 'task', priority: 'highest'
+    hey.execute %w{-P task}
+  end
+  
   it 'should create a new item' do
     memory_set.should_receive(:create).with 'task', {}
     hey.execute %w{task}
@@ -66,6 +71,11 @@ describe Hey do
   it 'should mark a task as high priority' do
     memory_set.should_receive(:update).with [1], priority: 'high'
     hey.execute %w{-p 1}
+  end
+
+  it 'should mark a task as highest priority' do
+    memory_set.should_receive(:update).with [1], priority: 'highest'
+    hey.execute %w{-P 1}
   end
 
   it 'should mark a task as complete' do

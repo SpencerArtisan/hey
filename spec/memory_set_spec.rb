@@ -159,7 +159,14 @@ describe MemorySet do
     it 'should display high priority memories in red' do
       memory_set = MemorySet.new [double(description: 'first', group: nil, priority: 'high').as_null_object]
       expect(memory_set.to_s).to eq " 0. first".red
+      expect(memory_set.to_s_high).to eq " 0. first".red
     end
+
+    it 'should display highest priority memories in uppercase red' do
+      memory_set = MemorySet.new [double(description: 'first', group: nil, priority: 'highest').as_null_object]
+      expect(memory_set.to_s_high).to eq " 0. FIRST".red
+    end
+
 
     it 'should display low priority memories in yellow' do
       memory_set = MemorySet.new [double(description: 'first', group: nil, priority: 'low').as_null_object]

@@ -36,6 +36,15 @@ class Hey
     end
   end
 
+  switch :P do |args|
+    if args.length == 1
+      memories.to_s_high
+    else
+      create_or_update args, priority: 'highest'
+      memories.to_s_high
+    end
+  end
+
   switch :c do |args|
     not_all_high = memories.complete id_args(args)
     remaining = not_all_high ? memories.to_s : memories.to_s_high
@@ -65,9 +74,9 @@ class Hey
        hey -l id [other ids]        make item with given id low priority
        hey -m id [other ids]        make item with given id medium priority
        hey -p id [other ids]        make item with given id high priority
+       hey -P id [other ids]        make item with given id highest priority
        hey -d id [other ids]        delete item with given id
        hey -r                       show recently completed items
-       hey -[n] id [other ids]      make memory high priority in n day's time
     }
   end
 

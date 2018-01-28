@@ -17,7 +17,6 @@ class MemorySet
         memory.update priority: priority
       end
     end
-
   end
 
   def stash group
@@ -107,7 +106,7 @@ class MemorySet
   end
 
   def to_s_high
-    active_memories.each_with_index.map {|memory, i| summary(i, memory) if memory.priority == 'high'}.compact.join "\n"
+	  active_memories.each_with_index.map {|memory, i| summary(i, memory) if memory.priority == 'high' || memory.priority == 'highest'}.compact.join "\n"
   end
 
   def active_memories
@@ -120,7 +119,11 @@ class MemorySet
 
   def summary index, memory
     text = " #{index}. #{memory.description}"
+    if memory.priority == 'highest' then
+	    text = text.upcase
+    end
     marker = case memory.priority
+             when 'highest' then text.red
              when 'high' then text.red
              when 'low' then text.yellow
              else text.green
